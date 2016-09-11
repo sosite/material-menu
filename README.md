@@ -1,4 +1,5 @@
-# ![Material Menu logo](https://raw.github.com/sosite/material-menu/raw/raw/material_menu_logo.png) Material Menu
+#![Material Menu logo](https://raw.github.com/sosite/material-menu/raw/raw/material_menu_logo.png) Material Menu
+#<img src="https://camo.githubusercontent.com/e3cf6eeef2e15cfa18d6b13176e8e06272ee6a17/68747470733a2f2f7261772e6769746875622e636f6d2f736f736974652f6d6174657269616c2d6d656e752f7261772f7261772f6d6174657269616c5f6d656e755f6c6f676f2e706e67" alt="Material Menu logo" data-canonical-src="https://raw.github.com/sosite/material-menu/raw/raw/material_menu_logo.png" align="center" style="max-width:100%;margin-top:-6px;"> Material Menu
 
 Morphing Android menu, back, dismiss and check buttons
 
@@ -32,7 +33,7 @@ Customisation is also available through attributes:
 
 ```xml
 app:mm_color="color"               // Color of drawable
-app:mm_visible="boolean"        	  // Visible
+app:mm_visible="boolean"           // Visible
 app:mm_transformDuration="integer" // Transformation animation duration
 app:mm_scale="integer"             // Scale factor of drawable
 app:mm_strokeWidth="integer"       // Stroke width of icons (can only be 1, 2 or 3)
