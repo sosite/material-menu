@@ -20,6 +20,12 @@ compile 'com.socros.android.lib:material-menu:1.6.0'
 compile 'com.balysv.materialmenu:material-menu-toolbar:1.5.4'
 ```
 
+```groovy
+repositories {
+    jcenter()
+}
+```
+
 ##Usage
 
 The library provides two wrappers of `MaterialMenuDrawable` that eases implementation into the ActionBar, NavigationDrawer slide interaction or into any other custom layout.
