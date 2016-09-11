@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 1.6.0 (2016-09-11)
+----------------------------
+
+- Fork repo
+- Move repository to jcenter
+- Drop deprecated compatibility by remove depencency to NineOldAndroids, ActionBarCompat and ActionBarSherlock (change min api to 11)
+- Update demo support libs
+
 Version 1.5.4 (2015-05-30)
 ----------------------------
 

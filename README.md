@@ -1,42 +1,36 @@
-Material Menu
-===============
+#<img src="https://camo.githubusercontent.com/e3cf6eeef2e15cfa18d6b13176e8e06272ee6a17/68747470733a2f2f7261772e6769746875622e636f6d2f736f736974652f6d6174657269616c2d6d656e752f7261772f7261772f6d6174657269616c5f6d656e755f6c6f676f2e706e67" alt="Material Menu logo" data-canonical-src="https://raw.github.com/sosite/material-menu/raw/raw/material_menu_logo.png" align="center" style="max-width:100%"> Material Menu
 
 Morphing Android menu, back, dismiss and check buttons
 
-![Demo Image](https://raw.github.com/balysv/material-menu/master/art/demo.gif)
+![Demo Image](https://raw.github.com/sosite/material-menu/raw/raw/demo.gif)
 
 Have full control of the animation:
 
-![Demo Drawer](https://raw.github.com/balysv/material-menu/master/art/demo_drawer.gif)
+![Demo Drawer](https://raw.github.com/sosite/material-menu/raw/raw/demo_drawer.gif)
 
-Including in your project
--------------------------
+##Including in your project
 
+[![Bintray](https://img.shields.io/bintray/v/sosite/maven/material-menu.svg)](https://bintray.com/sosite/maven/material-menu/_latestVersion) [Releases](https://github.com/sosite/material-menu/releases)
 
 ```groovy
 // stock actionBar
-compile 'com.balysv.materialmenu:material-menu:1.x.x'
+compile 'com.socros.android.lib:material-menu:1.6.0'
 
-// Toolbar and ActionBarCompat-v22 (includes support-v7:22.0.x)
-compile 'com.balysv.materialmenu:material-menu-toolbar:1.x.x'
-
-// actionBarCompat-v20 (up to support-v7:20.0.0 - does not support Toolbar)
-compile 'com.balysv.materialmenu:material-menu-abc:1.x.x'
-
-// actionBarSherlock
-compile 'com.balysv.materialmenu:material-menu-abs:1.x.x'
+// Toolbar and ActionBarCompat-v22 (includes support-v7:22.1.1)
+compile 'com.balysv.materialmenu:material-menu-toolbar:1.5.4'
 ```
 
-Check for latest version number on the widget below or visit [Releases](https://github.com/balysv/material-menu/releases)
+```groovy
+repositories {
+    jcenter()
+}
+```
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.balysv.materialmenu/material-menu/badge.svg?style=flat)](http://mvnrepository.com/artifact/com.balysv.materialmenu/material-menu)
-
-Usage
------
+##Usage
 
 The library provides two wrappers of `MaterialMenuDrawable` that eases implementation into the ActionBar, NavigationDrawer slide interaction or into any other custom layout.
 
-### MaterialMenuView
+###MaterialMenuView
 
 A plain old `View` that draws the icon and provides an API to manipulate its state.
 
@@ -44,23 +38,23 @@ Customisation is also available through attributes:
 
 ```xml
 app:mm_color="color"               // Color of drawable
-app:mm_visible="boolean"        	  // Visible
+app:mm_visible="boolean"           // Visible
 app:mm_transformDuration="integer" // Transformation animation duration
 app:mm_scale="integer"             // Scale factor of drawable
 app:mm_strokeWidth="integer"       // Stroke width of icons (can only be 1, 2 or 3)
 app:mm_rtlEnabled="boolean"        // Enabled RTL layout support (flips all drawables)
 ```
 
-### MaterialMenuIcon
+###MaterialMenuIcon
 
 A POJO that initializes the drawable and replaces the ActionBar icon.
 
 Jump to instructions for :
-- [ActionBar (stock, Sherlock, Compat)]( https://github.com/balysv/material-menu#use-as-action-bar-icon-stock-compat-or-sherlock)
-- [Toolbar](https://github.com/balysv/material-menu#use-in-toolbar)
-- [NavigationDrawer interaction ](https://github.com/balysv/material-menu#navigationdrawer-slide-interaction)
+- [ActionBar](#use-as-action-bar-icon)
+- [Toolbar](#use-in-toolbar)
+- [NavigationDrawer interaction](#navigationdrawer-slide-interaction)
 
-## API
+##API
 
 There are four icon states:
 
@@ -96,7 +90,7 @@ and `value` is between `0` and `2`
     
 **Note:** The current implementation resolves its state by current offset value. Make sure you use `offset` between `0` and `1` for forward animation and `1` and `2` for backwards to correctly save icon state on activity recreation.
     
-### Customisation
+###Customisation
 
 ```java
 // change color
@@ -114,13 +108,8 @@ MaterialMenu.setInterpolator(Interpolator interpolator)
 // set RTL layout support
 MaterialMenu.setRTLEnabled(boolean enabled)
 ```
-    
-### Action Bar
 
-#### Use as Action Bar icon (stock, Compat or Sherlock)
-
-Depending on the `ActionBar` you use, use one of the following classes:
-`MaterialMenuIcon`, `MaterialMenuIconCompat` or `MaterialMenuIconSherlock`.
+###Use as Action Bar icon
 
 In your `Activity` add the following:
 
@@ -148,7 +137,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
 }
 ```
 
-#### Use in Toolbar
+###Use in Toolbar
 
 Use it as a standalone drawable. Note: you have to handle icon state yourself:
 
@@ -209,14 +198,14 @@ protected void onPostCreate(Bundle savedInstanceState) {
 }
 ```
 
-#### Use in custom Action Bar view
+###Use in custom Action Bar view
 
 Simply add `MaterialMenuView` in your custom layout and register an `OnClickListener` to do the
 transformations. 
 
-See [source of Demo][2] for details
+See [source of Demo][4] for details
 
-#### NavigationDrawer slide interaction
+###NavigationDrawer slide interaction
 
 Implement `MaterialMenu` into your ActionBar as described above and add a custom `DrawerListener`:
 
@@ -274,12 +263,13 @@ protected void onSaveInstanceState(Bundle outState) {
 }
 ```
 
-Developed By
---------------------
+##Developed By
+
 Balys Valentukevicius @ [Lemon Labs][1]
 
-License
------------
+Wojciech Rozwadowski @ [Socros][2]
+
+##License
 
 ```
 Copyright 2014 Balys Valentukevicius
@@ -298,5 +288,6 @@ limitations under the License.
 ```
 
 [1]: http://www.lemonlabs.co
-[2]: https://github.com/balysv/material-menu/blob/master/demo/src/stock/java/com/balysv/materialmenu/demo/stock/CustomViewActivity.java
-[3]: http://gradleplease.appspot.com/
+[2]: http://socros.com
+[3]: https://github.com/sosite/material-menu/blob/masterchef/demo/src/stock/java/com/balysv/materialmenu/demo/stock/CustomViewActivity.java
+[4]: http://gradleplease.appspot.com/

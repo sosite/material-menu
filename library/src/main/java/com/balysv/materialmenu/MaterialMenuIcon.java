@@ -28,12 +28,11 @@ import static com.balysv.materialmenu.MaterialMenuDrawable.Stroke;
 /**
  * A helper class for implementing {@link MaterialMenuDrawable}
  * as an {@link android.app.ActionBar} icon.
- * <p/>
- * In order to preserve default ActionBar icon click state call {@link MaterialMenuBase#setNeverDrawTouch(boolean)}.
- * Otherwise, adjust your theme to disable pressed background color by setting <code>android:actionBarItemBackground</code>
+ * <p>
+ * To disable pressed background color adjust your theme by setting <code>android:actionBarItemBackground</code>
  * to null and use <code>android:actionButtonStyle</code>, <code>android:actionOverflowButtonStyle</code> to enable other
  * menu icon backgrounds.
- * <p/>
+ * <p>
  * Disables ActionBar Up arrow and replaces default drawable using {@link ActionBar#setIcon(android.graphics.drawable.Drawable)}
  */
 public class MaterialMenuIcon extends MaterialMenuBase {
