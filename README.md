@@ -60,10 +60,10 @@ app:mm_iconState="enum"            // Set the intial state of the drawable (burg
 
 ##API
 
-There are four icon states:
+There are five icon states:
 
 ```java
-BURGER, ARROW, X, CHECK
+BURGER, ARROW, X, CHECK, HIDE
 ```
 
 To morph the drawable state
@@ -89,7 +89,7 @@ To hide or show the drawable:
 MaterialMenu.setVisible(boolean visible)
 ```
 
-where `AnimationState` is one of `BURGER_ARROW, BURGER_X, ARROW_X, ARROW_CHECK, BURGER_CHECK, X_CHECK`
+where `AnimationState` is one of `BURGER_ARROW, BURGER_X, BURGER_CHECK, BURGER_HIDE, ARROW_X, ARROW_CHECK, ARROW_HIDE, X_CHECK, X_HIDE, CHECK_HIDE`
 and `value` is between `0` and `2`
     
 **Note:** The icon state is resolved by current offset value. Make sure you use `offset` between `0` and `1` for forward animation and `1` and `2` for backwards to correctly save icon state on activity recreation.
