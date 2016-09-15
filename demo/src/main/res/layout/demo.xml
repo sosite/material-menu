@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     app:mm_strokeWidth="2"
                     app:mm_color="#ffcc0000"
-                    app:mm_transformDuration="3000"
+                    app:mm_transformDuration="800"
                     app:mm_scale="@integer/demo_scale"/>
             </FrameLayout>
 

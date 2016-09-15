@@ -83,7 +83,7 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
 
         SeekBar duration = (SeekBar) findViewById(R.id.item_animation_duration);
         duration.setMax(4600);
-        duration.setProgress(2600);
+        duration.setProgress(MaterialMenuDrawable.DEFAULT_TRANSFORM_DURATION);
         duration.setOnSeekBarChangeListener(this);
 
         findViewById(R.id.switch_item_arrow).setOnClickListener(this);
