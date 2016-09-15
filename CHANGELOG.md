@@ -1,12 +1,30 @@
 Change Log
 ==========
 
+Version 2.0.0f (2016-09-15) *[fork update]*
+----------------------------
+
+Update fork to be in up to date to the main repo.
+
+Version 2.0.0 (2016-09-15)
+----------------------------
+
+- Stripping main library classes to bare minimum - `MaterialMenuDrawable` and `MaterialMenuView`.
+- Added `app:mm_iconState="enum"` attribute to `MaterialMenuView` that allows setting the
+initial state of the drawable.
+
 Version 1.6.0 (2016-09-11)
 ----------------------------
 
+**Major update**
+
 - Fork repo
 - Move repository to jcenter
-- Drop deprecated compatibility by remove depencency to NineOldAndroids, ActionBarCompat and ActionBarSherlock (change min api to 11)
+- Removed `nineoldadroids` dependency!
+- Removed all `extras` packages since ActionBarCompat or ActionBarSherlock are not being maintained
+for quite a while now. Most usages will be with `Toolbar`. Integrating the drawable into it will be up
+to the user of the library (see README or demo).
+- Bumped min api version to 14
 - Update demo support libs
 
 Version 1.5.4 (2015-05-30)

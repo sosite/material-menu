@@ -18,6 +18,7 @@ package com.balysv.materialmenu;
 
 
 import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -36,7 +37,7 @@ import android.view.animation.Interpolator;
 
 import static android.graphics.Paint.Style;
 
-public class MaterialMenuDrawable extends Drawable implements Animatable {
+public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Animatable {
 
     public enum IconState {
         BURGER, ARROW, X, CHECK
@@ -175,8 +176,8 @@ public class MaterialMenuDrawable extends Drawable implements Animatable {
     private boolean   visible;
     private boolean   rtlEnabled;
 
-    private ObjectAnimator transformation;
-    private Animator.AnimatorListener animatorListener;
+    private ObjectAnimator   transformation;
+    private AnimatorListener animatorListener;
 
     private MaterialMenuState materialMenuState;
 
@@ -215,7 +216,8 @@ public class MaterialMenuDrawable extends Drawable implements Animatable {
         materialMenuState = new MaterialMenuState();
     }
 
-    private MaterialMenuDrawable(int color, Stroke stroke, long transformDuration, int width, int height,
+    private MaterialMenuDrawable(
+        int color, Stroke stroke, long transformDuration, int width, int height,
         float iconWidth, float circleRadius, float strokeWidth, float dip1
     ) {
         this.dip1 = dip1;
@@ -606,7 +608,7 @@ public class MaterialMenuDrawable extends Drawable implements Animatable {
         transformation.setInterpolator(interpolator);
     }
 
-    public void setAnimationListener(Animator.AnimatorListener listener) {
+    public void setAnimationListener(AnimatorListener listener) {
         if (animatorListener != null) {
             transformation.removeListener(animatorListener);
         }
@@ -692,7 +694,7 @@ public class MaterialMenuDrawable extends Drawable implements Animatable {
         return currentIconState;
     }
 
-    public boolean isDrawableVisible(){
+    public boolean isDrawableVisible() {
         return visible;
     }
 
@@ -808,25 +810,20 @@ public class MaterialMenuDrawable extends Drawable implements Animatable {
         return transformationRunning;
     }
 
-    @Override
-    public int getIntrinsicWidth() {
+    @Override public int getIntrinsicWidth() {
         return width;
     }
 
-    @Override
-    public int getIntrinsicHeight() {
+    @Override public int getIntrinsicHeight() {
         return height;
     }
 
-
-    @Override
-    public ConstantState getConstantState() {
+    @Override public ConstantState getConstantState() {
         materialMenuState.changingConfigurations = getChangingConfigurations();
         return materialMenuState;
     }
 
-    @Override
-    public Drawable mutate() {
+    @Override public Drawable mutate() {
         materialMenuState = new MaterialMenuState();
         return this;
     }
@@ -837,8 +834,7 @@ public class MaterialMenuDrawable extends Drawable implements Animatable {
         private MaterialMenuState() {
         }
 
-        @Override
-        public Drawable newDrawable() {
+        @Override public Drawable newDrawable() {
             MaterialMenuDrawable drawable = new MaterialMenuDrawable(
                 circlePaint.getColor(), stroke, transformation.getDuration(),
                 width, height, iconWidth, circleRadius, strokeWidth, dip1
@@ -849,8 +845,7 @@ public class MaterialMenuDrawable extends Drawable implements Animatable {
             return drawable;
         }
 
-        @Override
-        public int getChangingConfigurations() {
+        @Override public int getChangingConfigurations() {
             return changingConfigurations;
         }
     }
