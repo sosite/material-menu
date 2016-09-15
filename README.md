@@ -36,7 +36,7 @@ protected void onCreate(Bundle savedInstanceState) {
         materialMenu.animateState(newState);
       }
     });
-    materialMenu = new MaterialMenuDrawable(this, Color.WHITE, Stroke.THIN);
+    materialMenu = new MaterialMenuDrawable(this, Color.WHITE, Stroke.REGULAR);
     toolbar.setNavigationIcon(materialMenu);
 }
 ```
@@ -108,7 +108,7 @@ protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    materialMenu = new MaterialMenuDrawable(this, Color.WHITE, Stroke.THIN);
+    materialMenu = new MaterialMenuDrawable(this, Color.WHITE, Stroke.REGULAR);
     toolbar.setNavigationIcon(materialMenu);
 
     drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

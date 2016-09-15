@@ -89,15 +89,15 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         /**
          * 3 dip
          */
-        REGULAR(3),
+        BOLD(3),
         /**
          * 2 dip
          */
-        THIN(2),
+        REGULAR(2),
         /**
          * 1 dip
          */
-        EXTRA_THIN(1);
+        THIN(1);
 
         private final int strokeWidth;
 
@@ -108,12 +108,11 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         protected static Stroke valueOf(int strokeWidth) {
             switch (strokeWidth) {
                 case 3:
-                    return REGULAR;
+                    return BOLD;
                 case 2:
-                    return THIN;
-                case 1:
-                    return EXTRA_THIN;
                 default:
+                    return REGULAR;
+                case 1:
                     return THIN;
             }
         }
@@ -559,17 +558,17 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
 
     private float resolveStrokeModifier(float ratio) {
         switch (stroke) {
-            case REGULAR:
+            case BOLD:
                 if (animationState == AnimationState.ARROW_X || animationState == AnimationState.X_CHECK) {
                     return dip3 - (dip3 * ratio);
                 }
                 return ratio * dip3;
-            case THIN:
+            case REGULAR:
                 if (animationState == AnimationState.ARROW_X || animationState == AnimationState.X_CHECK) {
                     return dip3 + diph - (dip3 + diph) * ratio;
                 }
                 return ratio * (dip3 + diph);
-            case EXTRA_THIN:
+            case THIN:
                 if (animationState == AnimationState.ARROW_X || animationState == AnimationState.X_CHECK) {
                     return dip4 - ((dip3 + dip1) * ratio);
                 }
