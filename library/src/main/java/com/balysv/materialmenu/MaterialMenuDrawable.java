@@ -40,11 +40,14 @@ import static android.graphics.Paint.Style;
 public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Animatable {
 
     public enum IconState {
-        BURGER, ARROW, X, CHECK
+        BURGER, ARROW, X, CHECK, HIDE
     }
 
     public enum AnimationState {
-        BURGER_ARROW, BURGER_X, ARROW_X, ARROW_CHECK, BURGER_CHECK, X_CHECK;
+        BURGER_ARROW, BURGER_X, BURGER_CHECK, BURGER_HIDE,
+        ARROW_X, ARROW_CHECK, ARROW_HIDE,
+        X_CHECK, X_HIDE,
+        CHECK_HIDE;
 
         public IconState getFirstState() {
             switch (this) {
@@ -52,14 +55,22 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                     return IconState.BURGER;
                 case BURGER_X:
                     return IconState.BURGER;
+                case BURGER_CHECK:
+                    return IconState.BURGER;
+                case BURGER_HIDE:
+                    return IconState.BURGER;
                 case ARROW_X:
                     return IconState.ARROW;
                 case ARROW_CHECK:
                     return IconState.ARROW;
-                case BURGER_CHECK:
-                    return IconState.BURGER;
+                case ARROW_HIDE:
+                    return IconState.ARROW;
                 case X_CHECK:
                     return IconState.X;
+                case X_HIDE:
+                    return IconState.X;
+                case CHECK_HIDE:
+                    return IconState.CHECK;
                 default:
                     return null;
             }
@@ -71,14 +82,22 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                     return IconState.ARROW;
                 case BURGER_X:
                     return IconState.X;
+                case BURGER_CHECK:
+                    return IconState.CHECK;
+                case BURGER_HIDE:
+                    return IconState.HIDE;
                 case ARROW_X:
                     return IconState.X;
                 case ARROW_CHECK:
                     return IconState.CHECK;
-                case BURGER_CHECK:
-                    return IconState.CHECK;
+                case ARROW_HIDE:
+                    return IconState.HIDE;
                 case X_CHECK:
                     return IconState.CHECK;
+                case X_HIDE:
+                    return IconState.HIDE;
+                case CHECK_HIDE:
+                    return IconState.HIDE;
                 default:
                     return null;
             }
@@ -292,6 +311,7 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         int alpha = 255;
 
         switch (animationState) {
+
             case BURGER_ARROW:
                 // rotate by 180
                 if (isMorphingForward()) {
@@ -302,15 +322,32 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // shorten one end
                 stopX -= ratio * resolveStrokeModifier(ratio) / 2;
                 break;
+
             case BURGER_X:
                 // fade out
                 alpha = (int) ((1 - ratio) * 255);
                 break;
+
+            case BURGER_CHECK:
+                // rotate until required angle
+                rotation = ratio * CHECK_MIDDLE_ANGLE;
+                // lengthen both ends
+                startX += ratio * (dip4 + dip3 / 2);
+                stopX += ratio * dip1;
+                pivotX = width / 2 + dip3 + diph;
+                break;
+
+            case BURGER_HIDE:
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
+                break;
+
             case ARROW_X:
                 // fade out and shorten one end
                 alpha = (int) ((1 - ratio) * 255);
                 startX += (1 - ratio) * dip2;
                 break;
+
             case ARROW_CHECK:
                 if (isMorphingForward()) {
                     // rotate until required angle
@@ -324,14 +361,14 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 stopX += ratio * dip1;
                 pivotX = width / 2 + dip3 + diph;
                 break;
-            case BURGER_CHECK:
-                // rotate until required angle
-                rotation = ratio * CHECK_MIDDLE_ANGLE;
-                // lengthen both ends
-                startX += ratio * (dip4 + dip3 / 2);
-                stopX += ratio * dip1;
-                pivotX = width / 2 + dip3 + diph;
+
+            case ARROW_HIDE:
+                // shorten one end
+                startX += resolveStrokeModifier(1) / 2;
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
                 break;
+
             case X_CHECK:
                 // fade in
                 alpha = (int) (ratio * 255);
@@ -341,6 +378,22 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 startX += ratio * (dip4 + dip3 / 2);
                 stopX += ratio * dip1;
                 pivotX = width / 2 + dip3 + diph;
+                break;
+
+            case X_HIDE:
+                // hide
+                alpha = 0;
+                break;
+
+            case CHECK_HIDE:
+                // rotate to required angle
+                rotation = CHECK_MIDDLE_ANGLE;
+                // lengthen both ends
+                startX += dip4 + dip3 / 2;
+                stopX += dip1;
+                pivotX = width / 2 + dip3 + diph;
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
                 break;
         }
 
@@ -366,6 +419,7 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         int alpha = 255;
 
         switch (animationState) {
+
             case BURGER_ARROW:
                 if (isMorphingForward()) {
                     // rotate until required angle
@@ -377,37 +431,44 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // rotate by middle
                 pivotX = width / 2;
                 pivotY = height / 2;
-
                 // shorten both ends
                 stopX -= resolveStrokeModifier(ratio);
                 startX += dip3 * ratio;
-
                 break;
+
             case BURGER_X:
                 // rotate until required angles
                 rotation = X_TOP_LINE_ANGLE * ratio;
                 rotation2 = X_ROTATION_ANGLE * ratio;
-
                 // pivot at left corner of line
                 pivotX = sidePadding + dip4;
                 pivotY = topPadding + dip3;
-
                 // shorten one end
                 startX += dip3 * ratio;
                 break;
+
+            case BURGER_CHECK:
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
+                break;
+
+            case BURGER_HIDE:
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
+                break;
+
             case ARROW_X:
                 // rotate from ARROW angle to X angle
                 rotation = ARROW_BOT_LINE_ANGLE + (X_TOP_LINE_ANGLE - ARROW_BOT_LINE_ANGLE) * ratio;
                 rotation2 = X_ROTATION_ANGLE * ratio;
-
                 // move pivot from ARROW pivot to X pivot
                 pivotX = width / 2 + (sidePadding + dip4 - width / 2) * ratio;
                 pivotY = height / 2 + (topPadding + dip3 - height / 2) * ratio;
-
                 // lengthen both ends
                 stopX -= resolveStrokeModifier(ratio);
                 startX += dip3;
                 break;
+
             case ARROW_CHECK:
                 // fade out
                 alpha = (int) ((1 - ratio) * 255);
@@ -415,15 +476,24 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 rotation = ARROW_BOT_LINE_ANGLE;
                 pivotX = width / 2;
                 pivotY = height / 2;
-
                 // shorted both ends
                 stopX -= resolveStrokeModifier(1);
                 startX += dip3;
                 break;
-            case BURGER_CHECK:
+
+            case ARROW_HIDE:
+                // rotate to required angle
+                rotation = ARROW_BOT_LINE_ANGLE;
+                // rotate by middle
+                pivotX = width / 2;
+                pivotY = height / 2;
+                // shorten both ends
+                stopX -= resolveStrokeModifier(1);
+                startX += dip3;
                 // fade out
                 alpha = (int) ((1 - ratio) * 255);
                 break;
+
             case X_CHECK:
                 // retain X configuration
                 rotation = X_TOP_LINE_ANGLE;
@@ -432,9 +502,26 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 pivotY = topPadding + dip3;
                 stopX += dip3 - dip3 * (1 - ratio);
                 startX += dip3;
-
                 // fade out
                 alpha = (int) ((1 - ratio) * 255);
+                break;
+
+            case X_HIDE:
+                // rotate to required angles
+                rotation = X_TOP_LINE_ANGLE;
+                rotation2 = X_ROTATION_ANGLE;
+                // pivot at left corner of line
+                pivotX = sidePadding + dip4;
+                pivotY = topPadding + dip3;
+                // shorten one end
+                startX += dip3;
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
+                break;
+
+            case CHECK_HIDE:
+                // hide
+                alpha = 0;
                 break;
         }
 
@@ -459,8 +546,10 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         float startY = height - topPadding - dip2;
         float stopX = width - sidePadding;
         float stopY = height - topPadding - dip2;
+        int alpha = 255;
 
         switch (animationState) {
+
             case BURGER_ARROW:
                 if (isMorphingForward()) {
                     // rotate to required angle
@@ -472,11 +561,11 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // pivot center of canvas
                 pivotX = width / 2;
                 pivotY = height / 2;
-
                 // shorten both ends
                 stopX = width - sidePadding - resolveStrokeModifier(ratio);
                 startX = sidePadding + dip3 * ratio;
                 break;
+
             case BURGER_X:
                 if (isMorphingForward()) {
                     // rotate around
@@ -487,69 +576,109 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 }
                 // rotate to required angle
                 rotation = X_BOT_LINE_ANGLE * ratio;
-
                 // pivot left corner of line
                 pivotX = sidePadding + dip4;
                 pivotY = height - topPadding - dip3;
-
                 // shorten one end
                 startX += dip3 * ratio;
                 break;
-            case ARROW_X:
-                // rotate from ARROW angle to X angle
-                rotation = ARROW_TOP_LINE_ANGLE + (360 + X_BOT_LINE_ANGLE - ARROW_TOP_LINE_ANGLE) * ratio;
-                rotation2 = -X_ROTATION_ANGLE * ratio;
 
-                // move pivot from ARROW pivot to X pivot
-                pivotX = width / 2 + (sidePadding + dip4 - width / 2) * ratio;
-                pivotY = height / 2 + (height / 2 - topPadding - dip3) * ratio;
-
-                // lengthen both ends
-                stopX -= resolveStrokeModifier(ratio);
-                startX += dip3;
-                break;
-            case ARROW_CHECK:
-                // rotate from ARROW angle to CHECK angle
-                rotation = ARROW_TOP_LINE_ANGLE + ratio * CHECK_BOTTOM_ANGLE;
-
-                // move pivot from ARROW pivot to CHECK pivot
-                pivotX = width / 2 + dip3 * ratio;
-                pivotY = height / 2 - dip3 * ratio;
-
-                // length stays same as ARROW
-                stopX -= resolveStrokeModifier(1);
-                startX += dip3 + (dip4 + dip1) * ratio;
-                break;
             case BURGER_CHECK:
                 // rotate from ARROW angle to CHECK angle
                 rotation = ratio * (CHECK_BOTTOM_ANGLE + ARROW_TOP_LINE_ANGLE);
-
                 // move pivot from BURGER pivot to CHECK pivot
                 pivotX = width / 2 + dip3 * ratio;
                 pivotY = height / 2 - dip3 * ratio;
-
                 // length stays same as BURGER
                 startX += dip8 * ratio;
                 stopX -= resolveStrokeModifier(ratio);
                 break;
+
+            case BURGER_HIDE:
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
+                break;
+
+            case ARROW_X:
+                // rotate from ARROW angle to X angle
+                rotation = ARROW_TOP_LINE_ANGLE + (360 + X_BOT_LINE_ANGLE - ARROW_TOP_LINE_ANGLE) * ratio;
+                rotation2 = -X_ROTATION_ANGLE * ratio;
+                // move pivot from ARROW pivot to X pivot
+                pivotX = width / 2 + (sidePadding + dip4 - width / 2) * ratio;
+                pivotY = height / 2 + (height / 2 - topPadding - dip3) * ratio;
+                // lengthen both ends
+                stopX -= resolveStrokeModifier(ratio);
+                startX += dip3;
+                break;
+
+            case ARROW_CHECK:
+                // rotate from ARROW angle to CHECK angle
+                rotation = ARROW_TOP_LINE_ANGLE + ratio * CHECK_BOTTOM_ANGLE;
+                // move pivot from ARROW pivot to CHECK pivot
+                pivotX = width / 2 + dip3 * ratio;
+                pivotY = height / 2 - dip3 * ratio;
+                // length stays same as ARROW
+                stopX -= resolveStrokeModifier(1);
+                startX += dip3 + (dip4 + dip1) * ratio;
+                break;
+
+            case ARROW_HIDE:
+                // rotate to required angle
+                rotation = ARROW_TOP_LINE_ANGLE;
+                // pivot center of canvas
+                pivotX = width / 2;
+                pivotY = height / 2;
+                // shorten both ends
+                stopX = width - sidePadding - resolveStrokeModifier(1);
+                startX = sidePadding + dip3;
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
+                break;
+
             case X_CHECK:
                 // rotate from X to CHECK angles
                 rotation2 = -X_ROTATION_ANGLE * (1 - ratio);
                 rotation = X_BOT_LINE_ANGLE + (CHECK_BOTTOM_ANGLE + ARROW_TOP_LINE_ANGLE - X_BOT_LINE_ANGLE) * ratio;
-
                 // move pivot from X to CHECK
                 pivotX = sidePadding + dip4 + (width / 2 + dip3 - sidePadding - dip4) * ratio;
                 pivotY = height - topPadding - dip3 + (topPadding + height / 2 - height) * ratio;
-
                 // shorten both ends
                 startX += dip8 - (dip4 + dip1) * (1 - ratio);
                 stopX -= resolveStrokeModifier(1 - ratio);
                 break;
+
+            case X_HIDE:
+                // rotate to required angles
+                rotation = X_BOT_LINE_ANGLE;
+                rotation2 = -X_ROTATION_ANGLE;
+                // pivot left corner of line
+                pivotX = sidePadding + dip4;
+                pivotY = height - topPadding - dip3;
+                // shorten one end
+                startX += dip3;
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
+                break;
+
+            case CHECK_HIDE:
+                // rotate to required angle
+                rotation = CHECK_BOTTOM_ANGLE + ARROW_TOP_LINE_ANGLE;
+                // move pivot from BURGER pivot to CHECK pivot
+                pivotX = width / 2 + dip3;
+                pivotY = height / 2 - dip3;
+                // length stays same as BURGER
+                startX += dip8;
+                stopX -= resolveStrokeModifier(1);
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
+                break;
         }
 
+        iconPaint.setAlpha(alpha);
         canvas.rotate(rotation, pivotX, pivotY);
         canvas.rotate(rotation2, pivotX2, pivotY2);
         canvas.drawLine(startX, startY, stopX, stopY, iconPaint);
+        iconPaint.setAlpha(255);
     }
 
     private boolean isMorphingForward() {
@@ -739,13 +868,30 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         boolean isCurrentArrow = currentIconState == IconState.ARROW;
         boolean isCurrentX = currentIconState == IconState.X;
         boolean isCurrentCheck = currentIconState == IconState.CHECK;
+        boolean isCurrentHide = currentIconState == IconState.HIDE;
         boolean isAnimatingBurger = animatingIconState == IconState.BURGER;
         boolean isAnimatingArrow = animatingIconState == IconState.ARROW;
         boolean isAnimatingX = animatingIconState == IconState.X;
         boolean isAnimatingCheck = animatingIconState == IconState.CHECK;
+        boolean isAnimatingHide = animatingIconState == IconState.HIDE;
 
         if ((isCurrentBurger && isAnimatingArrow) || (isCurrentArrow && isAnimatingBurger)) {
             animationState = AnimationState.BURGER_ARROW;
+            return isCurrentBurger;
+        }
+
+        if ((isCurrentBurger && isAnimatingX) || (isCurrentX && isAnimatingBurger)) {
+            animationState = AnimationState.BURGER_X;
+            return isCurrentBurger;
+        }
+
+        if ((isCurrentBurger && isAnimatingCheck) || (isCurrentCheck && isAnimatingBurger)) {
+            animationState = AnimationState.BURGER_CHECK;
+            return isCurrentBurger;
+        }
+
+        if ((isCurrentBurger && isAnimatingHide) || (isCurrentHide && isAnimatingBurger)) {
+            animationState = AnimationState.BURGER_HIDE;
             return isCurrentBurger;
         }
 
@@ -754,24 +900,29 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
             return isCurrentArrow;
         }
 
-        if ((isCurrentBurger && isAnimatingX) || (isCurrentX && isAnimatingBurger)) {
-            animationState = AnimationState.BURGER_X;
-            return isCurrentBurger;
-        }
-
         if ((isCurrentArrow && isAnimatingCheck) || (isCurrentCheck && isAnimatingArrow)) {
             animationState = AnimationState.ARROW_CHECK;
             return isCurrentArrow;
         }
 
-        if ((isCurrentBurger && isAnimatingCheck) || (isCurrentCheck && isAnimatingBurger)) {
-            animationState = AnimationState.BURGER_CHECK;
-            return isCurrentBurger;
+        if ((isCurrentArrow && isAnimatingHide) || (isCurrentHide && isAnimatingArrow)) {
+            animationState = AnimationState.ARROW_HIDE;
+            return isCurrentArrow;
         }
 
         if ((isCurrentX && isAnimatingCheck) || (isCurrentCheck && isAnimatingX)) {
             animationState = AnimationState.X_CHECK;
             return isCurrentX;
+        }
+
+        if ((isCurrentX && isAnimatingHide) || (isCurrentHide && isAnimatingX)) {
+            animationState = AnimationState.X_HIDE;
+            return isCurrentX;
+        }
+
+        if ((isCurrentCheck && isAnimatingHide) || (isCurrentHide && isAnimatingCheck)) {
+            animationState = AnimationState.CHECK_HIDE;
+            return isCurrentCheck;
         }
 
         throw new IllegalStateException(

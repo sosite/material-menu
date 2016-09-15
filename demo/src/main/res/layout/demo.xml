@@ -114,6 +114,15 @@
                     android:padding="4dp"
                     android:text="@string/animate_check"/>
 
+                <Button
+                    android:id="@+id/animate_item_hide"
+                    android:textColor="@android:color/white"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@string/animate_hide"/>
+
             </LinearLayout>
 
             <LinearLayout

@@ -47,11 +47,6 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
 
         // Demo view initialization
         initViews();
-        drawerLayout.postDelayed(new Runnable() {
-            @Override public void run() {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        }, 1500);
     }
 
     private void initViews() {
@@ -96,6 +91,7 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.animate_item_menu).setOnClickListener(this);
         findViewById(R.id.animate_item_x).setOnClickListener(this);
         findViewById(R.id.animate_item_check).setOnClickListener(this);
+        findViewById(R.id.animate_item_hide).setOnClickListener(this);
     }
 
     @Override protected void onPostCreate(Bundle savedInstanceState) {
@@ -117,6 +113,9 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.animate_item_check:
                 materialMenuView.animateIconState(MaterialMenuDrawable.IconState.CHECK);
+                break;
+            case R.id.animate_item_hide:
+                materialMenuView.animateIconState(MaterialMenuDrawable.IconState.HIDE);
                 break;
             case R.id.switch_item_menu:
                 materialMenuView.setIconState(MaterialMenuDrawable.IconState.BURGER);
