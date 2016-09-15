@@ -165,7 +165,7 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private static int generateState(int previous) {
-        int generated = new Random().nextInt(4);
+        int generated = new Random().nextInt(5);
         return generated != previous ? generated : generateState(previous);
     }
 
@@ -179,7 +179,9 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
                 return MaterialMenuDrawable.IconState.X;
             case 3:
                 return MaterialMenuDrawable.IconState.CHECK;
+            case 4:
+                return MaterialMenuDrawable.IconState.HIDE;
         }
-        throw new IllegalArgumentException("Must be a number [0,3)");
+        throw new IllegalArgumentException("Must be a number [0,4)");
     }
 }
