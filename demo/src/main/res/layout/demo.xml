@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     app:mm_strokeWidth="2"
                     app:mm_color="#ffcc0000"
-                    app:mm_transformDuration="3000"
+                    app:mm_transformDuration="800"
                     app:mm_scale="@integer/demo_scale"/>
             </FrameLayout>
 
@@ -113,6 +113,15 @@
                     android:layout_height="wrap_content"
                     android:padding="4dp"
                     android:text="@string/animate_check"/>
+
+                <Button
+                    android:id="@+id/animate_item_hide"
+                    android:textColor="@android:color/white"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@string/animate_hide"/>
 
             </LinearLayout>
 
