@@ -366,9 +366,14 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
             case ARROW_HIDE:
                 float transformRatio = translateRatio(ratio, .6f, 1);
                 // shorten left end
-                float slide = translateRatio(ratio, .1f, 1) * sidePadding / 4f;
-                stopX += slide;
-                startX = (1 - transformRatio) * (startX + slide + resolveStrokeModifier(1) / 2) + transformRatio * stopX;
+                float slide = translateRatio(ratio, .1f, 1) * sidePadding;
+                if (isMorphingForward()) {
+                    stopX += translateRatio(ratio, .7f, 1) * sidePadding / 2;
+                } else {
+                    stopX += slide / 2;
+                }
+
+                startX = (1 - transformRatio) * (startX + slide / 4 + resolveStrokeModifier(1) / 2) + transformRatio * stopX;
                 if (ratio >= .993) {
                     alpha = 0;
                 }
