@@ -367,15 +367,17 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
 
             case ARROW_HIDE:
                 // shorten left end
-                float slide = transformRatio(ratio, .1f, 1) * sidePadding;
                 if (isMorphingForward()) {
-                    transformRatio = transformRatio(ratio, .6f, .9f);
-                    stopX += transformRatio(ratio, .7f, 1) * sidePadding / 2;
+                    float slideRatio = transformRatio(ratio, .4f, .9f);
+                    transformRatio = transformRatio(ratio, .5f, .9f);
+                    startX = (1 - slideRatio) * (startX + resolveStrokeModifier(1) / 2) + slideRatio * (startX - sidePadding / 6);
+                    stopX = (1 - transformRatio) * stopX + transformRatio * startX;
                 } else {
+                    float slide = transformRatio(ratio, .1f, 1) * sidePadding;
                     transformRatio = transformRatio(ratio, .6f, 1);
                     stopX += slide / 2;
+                    startX = (1 - transformRatio) * (startX + slide / 4 + resolveStrokeModifier(1) / 2) + transformRatio * stopX;
                 }
-                startX = (1 - transformRatio) * (startX + slide / 4 + resolveStrokeModifier(1) / 2) + transformRatio * stopX;
                 break;
 
             case X_CHECK:
@@ -509,13 +511,15 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 pivotX = width / 2;
                 pivotY = height / 2;
                 // slide
-                float slide = transformRatio(ratio, .1f, 1) * sidePadding / 8;
+                float slide = isMorphingForward() ? 0 : transformRatio(ratio, .1f, 1) * sidePadding / 8;
                 startY += slide;
                 stopY += slide;
                 // shorten left ends
                 stopX -= resolveStrokeModifier(1) + slide;
                 // shorten right end
-                transformRatio = transformRatio(ratio, 0, .4f);
+                transformRatio = transformRatio(ratio,
+                        isMorphingForward() ? .0f : 0,
+                        isMorphingForward() ? .5f : .4f);
                 startX = (1 - transformRatio) * (startX - slide + dip3) + transformRatio * (stopX + dip2);
                 if (startX > stopX) {
                     startX = stopX;
@@ -668,13 +672,15 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 pivotX = width / 2;
                 pivotY = height / 2;
                 // slide
-                float slide = transformRatio(ratio, .1f, 1) * sidePadding / 8;
+                float slide = isMorphingForward() ? 0 : transformRatio(ratio, .1f, 1) * sidePadding / 8;
                 startY -= slide;
                 stopY -= slide;
                 // shorten left ends
                 stopX = width - sidePadding - resolveStrokeModifier(1) - slide;
                 // shorten right ends
-                transformRatio = transformRatio(ratio, .05f, .6f);
+                transformRatio = transformRatio(ratio,
+                        isMorphingForward() ? .3f : .1f,
+                        isMorphingForward() ? .8f : .6f);
                 startX = (1 - transformRatio) * (sidePadding - slide + dip3) + transformRatio * (stopX + dip2);
                 if (startX > stopX) {
                     startX = stopX;
