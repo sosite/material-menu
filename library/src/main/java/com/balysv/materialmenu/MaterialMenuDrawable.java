@@ -363,10 +363,12 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case ARROW_HIDE:
-                // shorten one end
-                startX += resolveStrokeModifier(1) / 2;
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                // shorten left end
+                ratio = translateRatio(ratio, .6f, 1);
+                startX = (1 - ratio) * (startX + resolveStrokeModifier(1) / 2) + ratio * stopX;
+                if (ratio >= .993) {
+                    alpha = 0;
+                }
                 break;
 
             case X_CHECK:
@@ -487,11 +489,14 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // rotate by middle
                 pivotX = width / 2;
                 pivotY = height / 2;
-                // shorten both ends
+                // shorten left ends
                 stopX -= resolveStrokeModifier(1);
-                startX += dip3;
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                // shorten right end
+                ratio = translateRatio(ratio, 0, .4f);
+                startX = (1-ratio) * (startX + dip3) + ratio * (stopX + dip2);
+                if (startX > stopX) {
+                    startX = stopX;
+                }
                 break;
 
             case X_CHECK:
@@ -628,11 +633,14 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // pivot center of canvas
                 pivotX = width / 2;
                 pivotY = height / 2;
-                // shorten both ends
+                // shorten left ends
                 stopX = width - sidePadding - resolveStrokeModifier(1);
-                startX = sidePadding + dip3;
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                // shorten right ends
+                ratio = translateRatio(ratio, .05f, .6f);
+                startX = (1-ratio) * (sidePadding + dip3) + ratio * (stopX + dip2);
+                if (startX > stopX) {
+                    startX = stopX;
+                }
                 break;
 
             case X_CHECK:
@@ -704,6 +712,23 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 return ratio * dip4;
         }
         return 0;
+    }
+
+    /**
+     * Translate ratio to specific start and end points
+     * @param ratio         current ratio
+     * @param startPoint    start point [0, 1)
+     * @param endPoint      end point (0, 1]
+     * @return Translated current ratio value depends on start and end points
+     */
+    private float translateRatio(float ratio, float startPoint, float endPoint) {
+        if (ratio <= startPoint) {
+            return 0;
+        } else if (ratio >= endPoint) {
+            return 1;
+        } else {
+            return (ratio - startPoint) / (endPoint - startPoint);
+        }
     }
 
     @Override public void setAlpha(int alpha) {
