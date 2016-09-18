@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+Version 2.1.0 (2016-09-18)
+------------------------------------------
+
+- Add HIDE icon state
+- Change stroke naming (**API break**):
+  - BOLD
+  - REGULAR
+  - THIN
+
 Version 2.0.0f (2016-09-15) *[fork update]*
 ----------------------------
 
