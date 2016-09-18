@@ -500,9 +500,9 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case ARROW_X:
-                // fade out and shorten one end
-                alpha = (int) ((1 - ratio) * 255);
-                startX += (1 - ratio) * mDip2;
+                // shorten the length
+                transformRatio = transformRatio(ratio, 0, .6f);
+                startX += mDip2 + transformRatio * (stopX - startX - mDip2);
                 break;
 
             case ARROW_CHECK:
