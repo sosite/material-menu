@@ -301,6 +301,8 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         canvas.restore();
         canvas.save();
 
+        float transformRatio;
+
         float rotation = 0;
         float pivotX = width / 2;
         float pivotY = width / 2;
@@ -338,9 +340,9 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case BURGER_HIDE:
-                ratio = translateRatio(ratio, .2f, .8f);
-                startX = (1 - ratio) * startX + ratio * startX / 1.5f;
-                stopX = (1 - ratio) * stopX + ratio * startX;
+                transformRatio = transformRatio(ratio, .2f, .8f);
+                startX = (1 - transformRatio) * startX + transformRatio * startX / 1.5f;
+                stopX = (1 - transformRatio) * stopX + transformRatio * startX;
                 break;
 
             case ARROW_X:
@@ -364,19 +366,20 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case ARROW_HIDE:
-                float transformRatio = translateRatio(ratio, .6f, 1);
                 // shorten left end
-                float slide = translateRatio(ratio, .1f, 1) * sidePadding;
+                float slide = transformRatio(ratio, .1f, 1) * sidePadding;
                 if (isMorphingForward()) {
-                    stopX += translateRatio(ratio, .7f, 1) * sidePadding / 2;
+                    stopX += transformRatio(ratio, .7f, 1) * sidePadding / 2;
                 } else {
                     stopX += slide / 2;
                 }
 
+                transformRatio = transformRatio(
+                        ratio,
+                        .6f,
+                        isMorphingForward() ? .9f : 1);
+
                 startX = (1 - transformRatio) * (startX + slide / 4 + resolveStrokeModifier(1) / 2) + transformRatio * stopX;
-                if (ratio >= .993) {
-                    alpha = 0;
-                }
                 break;
 
             case X_CHECK:
@@ -415,6 +418,8 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
 
     private void drawTopLine(Canvas canvas, float ratio) {
         canvas.save();
+
+        float transformRatio;
 
         float rotation = 0, pivotX = 0, pivotY = 0;
         float rotation2 = 0;
@@ -464,12 +469,12 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
 
             case BURGER_HIDE:
                 if (isMorphingForward()) {
-                    ratio = translateRatio(ratio, 0, .6f);
+                    transformRatio = transformRatio(ratio, 0, .6f);
                 } else {
-                    ratio = translateRatio(ratio, .4f, .9f);
+                    transformRatio = transformRatio(ratio, .4f, .9f);
                 }
-                startX = (1 - ratio) * startX + ratio * startX / 1.5f;
-                stopX = (1 - ratio) * stopX + ratio * startX;
+                startX = (1 - transformRatio) * startX + transformRatio * startX / 1.5f;
+                stopX = (1 - transformRatio) * stopX + transformRatio * startX;
                 break;
 
             case ARROW_X:
@@ -497,19 +502,19 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case ARROW_HIDE:
-                float transformRatio = translateRatio(ratio, 0, .4f);
                 // rotate to required angle
                 rotation = ARROW_BOT_LINE_ANGLE;
                 // rotate by middle
                 pivotX = width / 2;
                 pivotY = height / 2;
                 // slide
-                float slide = translateRatio(ratio, .1f, 1) * sidePadding / 8;
+                float slide = transformRatio(ratio, .1f, 1) * sidePadding / 8;
                 startY += slide;
                 stopY += slide;
                 // shorten left ends
                 stopX -= resolveStrokeModifier(1) + slide;
                 // shorten right end
+                transformRatio = transformRatio(ratio, 0, .4f);
                 startX = (1 - transformRatio) * (startX - slide + dip3) + transformRatio * (stopX + dip2);
                 if (startX > stopX) {
                     startX = stopX;
@@ -536,9 +541,13 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 pivotX = sidePadding + dip4;
                 pivotY = topPadding + dip3;
                 // shorten one end
-                startX += dip3;
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                transformRatio = transformRatio(ratio, .2f, .9f);
+                if (isMorphingForward()) {
+                    startX += dip3;
+                    stopX = (1 - transformRatio) * stopX + transformRatio * startX;
+                } else {
+                    startX = (1 - transformRatio) * (startX + dip3) + transformRatio * stopX;
+                }
                 break;
 
             case CHECK_HIDE:
@@ -557,6 +566,8 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
     private void drawBottomLine(Canvas canvas, float ratio) {
         canvas.restore();
         canvas.save();
+
+        float transformRatio;
 
         float rotation = 0, pivotX = 0, pivotY = 0;
         float rotation2 = 0;
@@ -618,12 +629,12 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
 
             case BURGER_HIDE:
                 if (isMorphingForward()) {
-                    ratio = translateRatio(ratio, .4f, .9f);
+                    transformRatio = transformRatio(ratio, .4f, .9f);
                 } else {
-                    ratio = translateRatio(ratio, 0, .6f);
+                    transformRatio = transformRatio(ratio, 0, .6f);
                 }
-                startX = (1 - ratio) * startX + ratio * startX / 1.5f;
-                stopX = (1 - ratio) * stopX + ratio * startX;
+                startX = (1 - transformRatio) * startX + transformRatio * startX / 1.5f;
+                stopX = (1 - transformRatio) * stopX + transformRatio * startX;
                 break;
 
             case ARROW_X:
@@ -650,19 +661,19 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case ARROW_HIDE:
-                float transformRatio = translateRatio(ratio, .05f, .6f);
                 // rotate to required angle
                 rotation = ARROW_TOP_LINE_ANGLE;
                 // pivot center of canvas
                 pivotX = width / 2;
                 pivotY = height / 2;
                 // slide
-                float slide = translateRatio(ratio, .1f, 1) * sidePadding / 8;
+                float slide = transformRatio(ratio, .1f, 1) * sidePadding / 8;
                 startY -= slide;
                 stopY -= slide;
                 // shorten left ends
                 stopX = width - sidePadding - resolveStrokeModifier(1) - slide;
                 // shorten right ends
+                transformRatio = transformRatio(ratio, .05f, .6f);
                 startX = (1 - transformRatio) * (sidePadding - slide + dip3) + transformRatio * (stopX + dip2);
                 if (startX > stopX) {
                     startX = stopX;
@@ -689,9 +700,13 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 pivotX = sidePadding + dip4;
                 pivotY = height - topPadding - dip3;
                 // shorten one end
-                startX += dip3;
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                transformRatio = transformRatio(ratio, 0, .7f);
+                if (isMorphingForward()) {
+                    startX += dip3;
+                    stopX = (1 - transformRatio) * stopX + transformRatio * startX;
+                } else {
+                    startX = (1 - transformRatio) * (startX + dip3) + transformRatio * stopX;
+                }
                 break;
 
             case CHECK_HIDE:
@@ -747,7 +762,7 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
      * @param endPoint      end point (0, 1]
      * @return Translated current ratio value depends on start and end points
      */
-    private float translateRatio(float ratio, float startPoint, float endPoint) {
+    private float transformRatio(float ratio, float startPoint, float endPoint) {
         if (ratio <= startPoint) {
             return 0;
         } else if (ratio >= endPoint) {
