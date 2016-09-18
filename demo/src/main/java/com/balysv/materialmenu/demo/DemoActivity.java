@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.SeekBar;
 
 import com.balysv.materialmenu.MaterialMenuDrawable;
+import com.balysv.materialmenu.MaterialMenuDrawable.IconState;
 import com.balysv.materialmenu.MaterialMenuView;
 
 import java.util.Random;
@@ -21,10 +22,9 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
 
     private Toolbar          toolbar;
     private MaterialMenuView materialMenuView;
-    private int              materialButtonState;
+    private IconState        materialMenuState;
     private DrawerLayout     drawerLayout;
     private boolean          direction;
-    private int              actionBarMenuState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +40,7 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 // random state
-                actionBarMenuState = generateState(actionBarMenuState);
-                getMaterialMenu(toolbar).animateIconState(intToState(actionBarMenuState));
+                setMainState();
             }
         });
 
@@ -59,7 +58,7 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                getMaterialMenu(toolbar).setTransformationOffset(
+                getMaterialMenu().setTransformationOffset(
                     MaterialMenuDrawable.AnimationState.BURGER_ARROW,
                     direction ? 2 - slideOffset : slideOffset
                 );
@@ -103,31 +102,31 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
         final int id = v.getId();
         switch (id) {
             case R.id.animate_item_menu:
-                materialMenuView.animateIconState(MaterialMenuDrawable.IconState.BURGER);
+                animateIconState(IconState.BURGER);
                 break;
             case R.id.animate_item_arrow:
-                materialMenuView.animateIconState(MaterialMenuDrawable.IconState.ARROW);
+                animateIconState(IconState.ARROW);
                 break;
             case R.id.animate_item_x:
-                materialMenuView.animateIconState(MaterialMenuDrawable.IconState.X);
+                animateIconState(IconState.X);
                 break;
             case R.id.animate_item_check:
-                materialMenuView.animateIconState(MaterialMenuDrawable.IconState.CHECK);
+                animateIconState(IconState.CHECK);
                 break;
             case R.id.animate_item_hide:
-                materialMenuView.animateIconState(MaterialMenuDrawable.IconState.HIDE);
+                animateIconState(IconState.HIDE);
                 break;
             case R.id.switch_item_menu:
-                materialMenuView.setIconState(MaterialMenuDrawable.IconState.BURGER);
+                setIconState(IconState.BURGER);
                 break;
             case R.id.switch_item_arrow:
-                materialMenuView.setIconState(MaterialMenuDrawable.IconState.ARROW);
+                setIconState(IconState.ARROW);
                 break;
             case R.id.switch_item_x:
-                materialMenuView.setIconState(MaterialMenuDrawable.IconState.X);
+                setIconState(IconState.X);
                 break;
             case R.id.switch_item_check:
-                materialMenuView.setIconState(MaterialMenuDrawable.IconState.CHECK);
+                setIconState(IconState.CHECK);
                 break;
             case R.id.switch_item_show:
                 materialMenuView.setVisible(true);
@@ -142,8 +141,8 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setMainState() {
-        materialButtonState = generateState(materialButtonState);
-        materialMenuView.animateIconState(intToState(materialButtonState));
+        materialMenuState = generateNewState(materialMenuState);
+        animateIconState(materialMenuState);
     }
 
     private void refreshDrawerState() {
@@ -160,13 +159,23 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
     @Override public void onStopTrackingTouch(SeekBar seekBar) {
     }
 
-    private static MaterialMenuDrawable getMaterialMenu(Toolbar toolbar) {
+    private MaterialMenuDrawable getMaterialMenu() {
         return (MaterialMenuDrawable) toolbar.getNavigationIcon();
     }
 
-    private static int generateState(int previous) {
-        int generated = new Random().nextInt(5);
-        return generated != previous ? generated : generateState(previous);
+    private void animateIconState(IconState iconState) {
+        getMaterialMenu().animateIconState(iconState);
+        materialMenuView.animateIconState(iconState);
+    }
+
+    private void setIconState(IconState iconState) {
+        getMaterialMenu().setIconState(iconState);
+        materialMenuView.setIconState(iconState);
+    }
+
+    private static IconState generateNewState(IconState previous) {
+        IconState generated = intToState(new Random().nextInt(5));
+        return generated != previous ? generated : generateNewState(previous);
     }
 
     private static MaterialMenuDrawable.IconState intToState(int state) {
