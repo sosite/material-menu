@@ -20,11 +20,11 @@ import static com.balysv.materialmenu.MaterialMenuDrawable.Stroke;
 
 public class DemoActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
-    private Toolbar          toolbar;
-    private MaterialMenuView materialMenuView;
-    private IconState        materialMenuState;
-    private DrawerLayout     drawerLayout;
-    private boolean          direction;
+    private Toolbar mToolbar;
+    private MaterialMenuView mMaterialMenuView;
+    private IconState mMaterialMenuState;
+    private DrawerLayout mDrawerLayout;
+    private boolean mDirection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +32,14 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
 
         // Setup
         setContentView(R.layout.demo);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         MaterialMenuDrawable materialMenu = new MaterialMenuDrawable(this, Color.WHITE, Stroke.REGULAR);
-        toolbar.setNavigationIcon(materialMenu);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+        mToolbar.setNavigationIcon(materialMenu);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 // random state
                 setMainState();
             }
@@ -49,29 +50,29 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initViews() {
-        materialMenuView = (MaterialMenuView) findViewById(R.id.material_menu_button);
-        materialMenuView.setOnClickListener(this);
+        mMaterialMenuView = (MaterialMenuView) findViewById(R.id.material_menu_button);
+        mMaterialMenuView.setOnClickListener(this);
 
-        drawerLayout = ((DrawerLayout) findViewById(R.id.drawer_layout));
-        drawerLayout.setScrimColor(Color.parseColor("#66000000"));
-        drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+        mDrawerLayout = ((DrawerLayout) findViewById(R.id.drawer_layout));
+        mDrawerLayout.setScrimColor(Color.parseColor("#66000000"));
+        mDrawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 getMaterialMenu().setTransformationOffset(
-                    MaterialMenuDrawable.AnimationState.BURGER_ARROW,
-                    direction ? 2 - slideOffset : slideOffset
+                        MaterialMenuDrawable.AnimationState.BURGER_ARROW,
+                        mDirection ? 2 - slideOffset : slideOffset
                 );
             }
 
             @Override
             public void onDrawerOpened(android.view.View drawerView) {
-                direction = true;
+                mDirection = true;
             }
 
             @Override
             public void onDrawerClosed(android.view.View drawerView) {
-                direction = false;
+                mDirection = false;
             }
         });
 
@@ -93,12 +94,14 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.animate_item_hide).setOnClickListener(this);
     }
 
-    @Override protected void onPostCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         refreshDrawerState();
     }
 
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
         final int id = v.getId();
         switch (id) {
             case R.id.animate_item_menu:
@@ -129,10 +132,10 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
                 setIconState(IconState.CHECK);
                 break;
             case R.id.switch_item_show:
-                materialMenuView.setVisible(true);
+                mMaterialMenuView.setVisible(true);
                 break;
             case R.id.switch_item_hide:
-                materialMenuView.setVisible(false);
+                mMaterialMenuView.setVisible(false);
                 break;
             case R.id.material_menu_button:
                 setMainState();
@@ -141,36 +144,39 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setMainState() {
-        materialMenuState = generateNewState(materialMenuState);
-        animateIconState(materialMenuState);
+        mMaterialMenuState = generateNewState(mMaterialMenuState);
+        animateIconState(mMaterialMenuState);
     }
 
     private void refreshDrawerState() {
-        this.direction = drawerLayout.isDrawerOpen(GravityCompat.START);
+        this.mDirection = mDrawerLayout.isDrawerOpen(GravityCompat.START);
     }
 
-    @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        materialMenuView.setTransformationDuration(400 + progress);
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        mMaterialMenuView.setTransformationDuration(400 + progress);
     }
 
-    @Override public void onStartTrackingTouch(SeekBar seekBar) {
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
     }
 
-    @Override public void onStopTrackingTouch(SeekBar seekBar) {
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
     }
 
     private MaterialMenuDrawable getMaterialMenu() {
-        return (MaterialMenuDrawable) toolbar.getNavigationIcon();
+        return (MaterialMenuDrawable) mToolbar.getNavigationIcon();
     }
 
     private void animateIconState(IconState iconState) {
         getMaterialMenu().animateIconState(iconState);
-        materialMenuView.animateIconState(iconState);
+        mMaterialMenuView.animateIconState(iconState);
     }
 
     private void setIconState(IconState iconState) {
         getMaterialMenu().setIconState(iconState);
-        materialMenuView.setIconState(iconState);
+        mMaterialMenuView.setIconState(iconState);
     }
 
     private static IconState generateNewState(IconState previous) {

@@ -41,9 +41,9 @@ import static com.balysv.materialmenu.MaterialMenuDrawable.Stroke;
  */
 public class MaterialMenuView extends View implements MaterialMenu {
 
-    private MaterialMenuDrawable drawable;
+    private MaterialMenuDrawable mDrawable;
 
-    private IconState currentState = IconState.BURGER;
+    private IconState mCurrentState = IconState.BURGER;
 
     public MaterialMenuView(Context context) {
         this(context, null);
@@ -72,127 +72,144 @@ public class MaterialMenuView extends View implements MaterialMenu {
 
             switch (state) {
                 case 0:
-                    currentState = IconState.BURGER;
+                    mCurrentState = IconState.BURGER;
                     break;
                 case 1:
-                    currentState = IconState.ARROW;
+                    mCurrentState = IconState.ARROW;
                     break;
                 case 2:
-                    currentState = IconState.X;
+                    mCurrentState = IconState.X;
                     break;
                 case 3:
-                    currentState = IconState.CHECK;
+                    mCurrentState = IconState.CHECK;
                     break;
             }
 
-            drawable = new MaterialMenuDrawable(context, color, stroke, scale, transformDuration);
+            mDrawable = new MaterialMenuDrawable(context, color, stroke, scale, transformDuration);
 
-            drawable.setIconState(currentState);
-            drawable.setVisible(visible);
-            drawable.setRTLEnabled(rtlEnabled);
+            mDrawable.setIconState(mCurrentState);
+            mDrawable.setVisible(visible);
+            mDrawable.setRTLEnabled(rtlEnabled);
         } finally {
             attr.recycle();
         }
 
-        drawable.setCallback(this);
+        mDrawable.setCallback(this);
     }
 
-    @Override public void draw(Canvas canvas) {
+    @Override
+    public void draw(Canvas canvas) {
         super.draw(canvas);
         if (getPaddingLeft() != 0 || getPaddingTop() != 0) {
             int saveCount = canvas.getSaveCount();
             canvas.save();
             canvas.translate(getPaddingLeft(), getPaddingTop());
-            drawable.draw(canvas);
+            mDrawable.draw(canvas);
             canvas.restoreToCount(saveCount);
         } else {
-            drawable.draw(canvas);
+            mDrawable.draw(canvas);
         }
     }
 
-    @Override public void setPadding(int left, int top, int right, int bottom) {
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
         super.setPadding(left, top, right, bottom);
         adjustDrawablePadding();
     }
 
-    @Override protected boolean verifyDrawable(Drawable who) {
-        return who == drawable || super.verifyDrawable(who);
+    @Override
+    protected boolean verifyDrawable(Drawable who) {
+        return who == mDrawable || super.verifyDrawable(who);
     }
 
-    @Override public void setIconState(IconState state) {
-        currentState = state;
-        drawable.setIconState(state);
+    @Override
+    public void setIconState(IconState state) {
+        mCurrentState = state;
+        mDrawable.setIconState(state);
     }
 
-    @Override public IconState getIconState() {
-        return drawable.getIconState();
+    @Override
+    public IconState getIconState() {
+        return mDrawable.getIconState();
     }
 
-    @Override public void animateIconState(IconState state) {
-        currentState = state;
-        drawable.animateIconState(state);
+    @Override
+    public void animateIconState(IconState state) {
+        mCurrentState = state;
+        mDrawable.animateIconState(state);
     }
 
-    @Override public void setColor(int color) {
-        drawable.setColor(color);
+    @Override
+    public void setColor(int color) {
+        mDrawable.setColor(color);
     }
 
-    @Override public void setVisible(boolean visible) {
-        drawable.setVisible(visible);
+    @Override
+    public void setVisible(boolean visible) {
+        mDrawable.setVisible(visible);
     }
 
-    @Override public void setTransformationDuration(int duration) {
-        drawable.setTransformationDuration(duration);
+    @Override
+    public void setTransformationDuration(int duration) {
+        mDrawable.setTransformationDuration(duration);
     }
 
-    @Override public void setInterpolator(Interpolator interpolator) {
-        drawable.setInterpolator(interpolator);
+    @Override
+    public void setInterpolator(Interpolator interpolator) {
+        mDrawable.setInterpolator(interpolator);
     }
 
-    @Override public void setAnimationListener(Animator.AnimatorListener listener) {
-        drawable.setAnimationListener(listener);
+    @Override
+    public void setAnimationListener(Animator.AnimatorListener listener) {
+        mDrawable.setAnimationListener(listener);
     }
 
-    @Override public void setRTLEnabled(boolean rtlEnabled) {
-        drawable.setRTLEnabled(rtlEnabled);
+    @Override
+    public void setRTLEnabled(boolean rtlEnabled) {
+        mDrawable.setRTLEnabled(rtlEnabled);
     }
 
-    @Override public IconState setTransformationOffset(MaterialMenuDrawable.AnimationState animationState, float value) {
-        currentState = drawable.setTransformationOffset(animationState, value);
-        return currentState;
+    @Override
+    public IconState setTransformationOffset(MaterialMenuDrawable.AnimationState animationState, float value) {
+        mCurrentState = mDrawable.setTransformationOffset(animationState, value);
+        return mCurrentState;
     }
 
     public MaterialMenuDrawable getDrawable() {
-        return drawable;
+        return mDrawable;
     }
 
-    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int paddingX = getPaddingLeft() + getPaddingRight();
         int paddingY = getPaddingTop() + getPaddingBottom();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(drawable.getIntrinsicWidth() + paddingX, MeasureSpec.EXACTLY);
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(drawable.getIntrinsicHeight() + paddingY, MeasureSpec.EXACTLY);
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(mDrawable.getIntrinsicWidth() + paddingX, MeasureSpec.EXACTLY);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(mDrawable.getIntrinsicHeight() + paddingY, MeasureSpec.EXACTLY);
             setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
         } else {
-            setMeasuredDimension(drawable.getIntrinsicWidth() + paddingX, drawable.getIntrinsicHeight() + paddingY);
+            setMeasuredDimension(mDrawable.getIntrinsicWidth() + paddingX, mDrawable.getIntrinsicHeight() + paddingY);
         }
     }
 
-    @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         adjustDrawablePadding();
     }
 
-    @Override public Parcelable onSaveInstanceState() {
+    @Override
+    public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState savedState = new SavedState(superState);
-        savedState.state = currentState;
-        savedState.visible = drawable != null && drawable.isDrawableVisible();
+        savedState.state = mCurrentState;
+        savedState.visible = mDrawable != null && mDrawable.isDrawableVisible();
         return savedState;
     }
 
-    @Override public void onRestoreInstanceState(Parcelable state) {
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
         setIconState(savedState.state);
@@ -200,11 +217,11 @@ public class MaterialMenuView extends View implements MaterialMenu {
     }
 
     private void adjustDrawablePadding() {
-        if (drawable != null) {
-            drawable.setBounds(
-                0, 0,
-                drawable.getIntrinsicWidth() + getPaddingLeft() + getPaddingRight(),
-                drawable.getIntrinsicHeight() + getPaddingTop() + getPaddingBottom()
+        if (mDrawable != null) {
+            mDrawable.setBounds(
+                    0, 0,
+                    mDrawable.getIntrinsicWidth() + getPaddingLeft() + getPaddingRight(),
+                    mDrawable.getIntrinsicHeight() + getPaddingTop() + getPaddingBottom()
             );
         }
     }
@@ -215,7 +232,7 @@ public class MaterialMenuView extends View implements MaterialMenu {
 
     private static class SavedState extends BaseSavedState {
         protected IconState state;
-        protected boolean   visible;
+        protected boolean visible;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -227,18 +244,21 @@ public class MaterialMenuView extends View implements MaterialMenu {
             visible = in.readByte() != 0;
         }
 
-        @Override public void writeToParcel(Parcel out, int flags) {
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeInt(state.ordinal());
             out.writeByte((byte) (visible ? 1 : 0));
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
-            @Override public SavedState createFromParcel(Parcel in) {
+            @Override
+            public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
 
-            @Override public SavedState[] newArray(int size) {
+            @Override
+            public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }
         };

@@ -137,67 +137,67 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         }
     }
 
-    public static final int     DEFAULT_COLOR              = Color.WHITE;
-    public static final int     DEFAULT_SCALE              = 1;
-    public static final int     DEFAULT_TRANSFORM_DURATION = 800;
-    public static final boolean DEFAULT_VISIBLE            = true;
+    public static final int DEFAULT_COLOR = Color.WHITE;
+    public static final int DEFAULT_SCALE = 1;
+    public static final int DEFAULT_TRANSFORM_DURATION = 800;
+    public static final boolean DEFAULT_VISIBLE = true;
 
-    private static final int BASE_DRAWABLE_WIDTH  = 40;
+    private static final int BASE_DRAWABLE_WIDTH = 40;
     private static final int BASE_DRAWABLE_HEIGHT = 40;
-    private static final int BASE_ICON_WIDTH      = 20;
-    private static final int BASE_CIRCLE_RADIUS   = 18;
+    private static final int BASE_ICON_WIDTH = 20;
+    private static final int BASE_CIRCLE_RADIUS = 18;
 
     private static final float ARROW_MID_LINE_ANGLE = 180;
     private static final float ARROW_TOP_LINE_ANGLE = 135;
     private static final float ARROW_BOT_LINE_ANGLE = 225;
-    private static final float X_TOP_LINE_ANGLE     = 44;
-    private static final float X_BOT_LINE_ANGLE     = -44;
-    private static final float X_ROTATION_ANGLE     = 90;
-    private static final float CHECK_MIDDLE_ANGLE   = 135;
-    private static final float CHECK_BOTTOM_ANGLE   = -90;
+    private static final float X_TOP_LINE_ANGLE = 44;
+    private static final float X_BOT_LINE_ANGLE = -44;
+    private static final float X_ROTATION_ANGLE = 90;
+    private static final float CHECK_MIDDLE_ANGLE = 135;
+    private static final float CHECK_BOTTOM_ANGLE = -90;
 
     private static final float TRANSFORMATION_START = 0;
-    private static final float TRANSFORMATION_MID   = 1.0f;
-    private static final float TRANSFORMATION_END   = 2.0f;
+    private static final float TRANSFORMATION_MID = 1.0f;
+    private static final float TRANSFORMATION_END = 2.0f;
 
     private static final int DEFAULT_CIRCLE_ALPHA = 200;
 
-    private final float diph;
-    private final float dip1;
-    private final float dip2;
-    private final float dip3;
-    private final float dip4;
-    private final float dip8;
+    private final float mDipH;
+    private final float mDip1;
+    private final float mDip2;
+    private final float mDip3;
+    private final float mDip4;
+    private final float mDip8;
 
-    private final int   width;
-    private final int   height;
-    private final float strokeWidth;
-    private final float iconWidth;
-    private final float topPadding;
-    private final float sidePadding;
-    private final float circleRadius;
+    private final int mWidth;
+    private final int mHeight;
+    private final float mStrokeWidth;
+    private final float mIconWidth;
+    private final float mTopPadding;
+    private final float mSidePadding;
+    private final float mCircleRadius;
 
-    private final Stroke stroke;
+    private final Stroke mStroke;
 
-    private final Object lock = new Object();
+    private final Object mLock = new Object();
 
-    private final Paint iconPaint   = new Paint();
-    private final Paint circlePaint = new Paint();
+    private final Paint mIconPaint = new Paint();
+    private final Paint mCirclePaint = new Paint();
 
-    private float   transformationValue   = 0f;
-    private boolean transformationRunning = false;
+    private float mTransformationValue = 0f;
+    private boolean mTransformationRunning = false;
 
-    private IconState      currentIconState = IconState.BURGER;
-    private AnimationState animationState   = AnimationState.BURGER_ARROW;
+    private IconState mCurrentIconState = IconState.BURGER;
+    private AnimationState mAnimationState = AnimationState.BURGER_ARROW;
 
-    private IconState animatingIconState;
-    private boolean   visible;
-    private boolean   rtlEnabled;
+    private IconState mAnimatingIconState;
+    private boolean mVisible;
+    private boolean mRtlEnabled;
 
-    private ObjectAnimator   transformation;
-    private AnimatorListener animatorListener;
+    private ObjectAnimator mTransformation;
+    private AnimatorListener mAnimatorListener;
 
-    private MaterialMenuState materialMenuState;
+    private MaterialMenuState mMaterialMenuState;
 
     public MaterialMenuDrawable(Context context, int color, Stroke stroke) {
         this(context, color, stroke, DEFAULT_SCALE, DEFAULT_TRANSFORM_DURATION);
@@ -210,79 +210,80 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
     public MaterialMenuDrawable(Context context, int color, Stroke stroke, int scale, int transformDuration) {
         Resources resources = context.getResources();
         // convert each separately due to various densities
-        this.dip1 = dpToPx(resources, 1) * scale;
-        this.dip2 = dpToPx(resources, 2) * scale;
-        this.dip3 = dpToPx(resources, 3) * scale;
-        this.dip4 = dpToPx(resources, 4) * scale;
-        this.dip8 = dpToPx(resources, 8) * scale;
-        this.diph = dip1 / 2;
+        mDip1 = dpToPx(resources, 1) * scale;
+        mDip2 = dpToPx(resources, 2) * scale;
+        mDip3 = dpToPx(resources, 3) * scale;
+        mDip4 = dpToPx(resources, 4) * scale;
+        mDip8 = dpToPx(resources, 8) * scale;
+        mDipH = mDip1 / 2;
 
-        this.stroke = stroke;
-        this.visible = DEFAULT_VISIBLE;
-        this.width = (int) (dpToPx(resources, BASE_DRAWABLE_WIDTH) * scale);
-        this.height = (int) (dpToPx(resources, BASE_DRAWABLE_HEIGHT) * scale);
-        this.iconWidth = dpToPx(resources, BASE_ICON_WIDTH) * scale;
-        this.circleRadius = dpToPx(resources, BASE_CIRCLE_RADIUS) * scale;
-        this.strokeWidth = dpToPx(resources, stroke.strokeWidth) * scale;
+        mStroke = stroke;
+        mVisible = DEFAULT_VISIBLE;
+        mWidth = (int) (dpToPx(resources, BASE_DRAWABLE_WIDTH) * scale);
+        mHeight = (int) (dpToPx(resources, BASE_DRAWABLE_HEIGHT) * scale);
+        mIconWidth = dpToPx(resources, BASE_ICON_WIDTH) * scale;
+        mCircleRadius = dpToPx(resources, BASE_CIRCLE_RADIUS) * scale;
+        mStrokeWidth = dpToPx(resources, stroke.strokeWidth) * scale;
 
-        this.sidePadding = (width - iconWidth) / 2;
-        this.topPadding = (height - 5 * dip3) / 2;
+        mSidePadding = (mWidth - mIconWidth) / 2;
+        mTopPadding = (mHeight - 5 * mDip3) / 2;
 
         initPaint(color);
         initAnimations(transformDuration);
 
-        materialMenuState = new MaterialMenuState();
+        mMaterialMenuState = new MaterialMenuState();
     }
 
     private MaterialMenuDrawable(
-        int color, Stroke stroke, long transformDuration, int width, int height,
-        float iconWidth, float circleRadius, float strokeWidth, float dip1
+            int color, Stroke stroke, long transformDuration, int width, int height,
+            float iconWidth, float circleRadius, float strokeWidth, float dip1
     ) {
-        this.dip1 = dip1;
-        this.dip2 = dip1 * 2;
-        this.dip3 = dip1 * 3;
-        this.dip4 = dip1 * 4;
-        this.dip8 = dip1 * 8;
-        this.diph = dip1 / 2;
-        this.stroke = stroke;
-        this.width = width;
-        this.height = height;
-        this.iconWidth = iconWidth;
-        this.circleRadius = circleRadius;
-        this.strokeWidth = strokeWidth;
-        this.sidePadding = (width - iconWidth) / 2;
-        this.topPadding = (height - 5 * dip3) / 2;
+        mDip1 = dip1;
+        mDip2 = dip1 * 2;
+        mDip3 = dip1 * 3;
+        mDip4 = dip1 * 4;
+        mDip8 = dip1 * 8;
+        mDipH = dip1 / 2;
+        mStroke = stroke;
+        mWidth = width;
+        mHeight = height;
+        mIconWidth = iconWidth;
+        mCircleRadius = circleRadius;
+        mStrokeWidth = strokeWidth;
+        mSidePadding = (width - iconWidth) / 2;
+        mTopPadding = (height - 5 * mDip3) / 2;
 
         initPaint(color);
         initAnimations((int) transformDuration);
 
-        materialMenuState = new MaterialMenuState();
+        mMaterialMenuState = new MaterialMenuState();
     }
 
     private void initPaint(int color) {
-        iconPaint.setAntiAlias(true);
-        iconPaint.setStyle(Style.STROKE);
-        iconPaint.setStrokeWidth(strokeWidth);
-        iconPaint.setColor(color);
+        mIconPaint.setAntiAlias(true);
+        mIconPaint.setStyle(Style.STROKE);
+        mIconPaint.setStrokeWidth(mStrokeWidth);
+        mIconPaint.setColor(color);
 
-        circlePaint.setAntiAlias(true);
-        circlePaint.setStyle(Style.FILL);
-        circlePaint.setColor(color);
-        circlePaint.setAlpha(DEFAULT_CIRCLE_ALPHA);
+        mCirclePaint.setAntiAlias(true);
+        mCirclePaint.setStyle(Style.FILL);
+        mCirclePaint.setColor(color);
+        mCirclePaint.setAlpha(DEFAULT_CIRCLE_ALPHA);
 
-        setBounds(0, 0, width, height);
+        setBounds(0, 0, mWidth, mHeight);
     }
 
     /*
      * Drawing
      */
 
-    @Override public void draw(Canvas canvas) {
-        if (!visible) return;
+    @Override
+    public void draw(Canvas canvas) {
+        if (!mVisible) return;
 
-        final float ratio = transformationValue <= 1 ? transformationValue : 2 - transformationValue;
+        final float ratio = mTransformationValue <= 1 ? mTransformationValue : 2 - mTransformationValue;
 
-        if (rtlEnabled) {
+        if (mRtlEnabled) {
             canvas.save();
             canvas.scale(-1, 1, 0, 0);
             canvas.translate(-getIntrinsicWidth(), 0);
@@ -292,131 +293,9 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         drawMiddleLine(canvas, ratio);
         drawBottomLine(canvas, ratio);
 
-        if (rtlEnabled) {
+        if (mRtlEnabled) {
             canvas.restore();
         }
-    }
-
-    private void drawMiddleLine(Canvas canvas, float ratio) {
-        canvas.restore();
-        canvas.save();
-
-        float transformRatio;
-
-        float rotation = 0;
-        float pivotX = width / 2;
-        float pivotY = width / 2;
-        float startX = sidePadding;
-        float startY = topPadding + dip3 / 2 * 5;
-        float stopX = width - sidePadding;
-        float stopY = topPadding + dip3 / 2 * 5;
-        int alpha = 255;
-
-        switch (animationState) {
-
-            case BURGER_ARROW:
-                // rotate by 180
-                if (isMorphingForward()) {
-                    rotation = ratio * ARROW_MID_LINE_ANGLE;
-                } else {
-                    rotation = ARROW_MID_LINE_ANGLE + (1 - ratio) * ARROW_MID_LINE_ANGLE;
-                }
-                // shorten one end
-                stopX -= ratio * resolveStrokeModifier(ratio) / 2;
-                break;
-
-            case BURGER_X:
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
-                break;
-
-            case BURGER_CHECK:
-                // rotate until required angle
-                rotation = ratio * CHECK_MIDDLE_ANGLE;
-                // lengthen both ends
-                startX += ratio * (dip4 + dip3 / 2);
-                stopX += ratio * dip1;
-                pivotX = width / 2 + dip3 + diph;
-                break;
-
-            case BURGER_HIDE:
-                transformRatio = transformRatio(ratio, .2f, .8f);
-                startX = (1 - transformRatio) * startX + transformRatio * startX / 1.5f;
-                stopX = (1 - transformRatio) * stopX + transformRatio * startX;
-                break;
-
-            case ARROW_X:
-                // fade out and shorten one end
-                alpha = (int) ((1 - ratio) * 255);
-                startX += (1 - ratio) * dip2;
-                break;
-
-            case ARROW_CHECK:
-                if (isMorphingForward()) {
-                    // rotate until required angle
-                    rotation = ratio * CHECK_MIDDLE_ANGLE;
-                } else {
-                    // rotate back to starting angle
-                    rotation = CHECK_MIDDLE_ANGLE - CHECK_MIDDLE_ANGLE * (1 - ratio);
-                }
-                // shorten one end and lengthen the other
-                startX += dip3 / 2 + dip4 - (1 - ratio) * dip2;
-                stopX += ratio * dip1;
-                pivotX = width / 2 + dip3 + diph;
-                break;
-
-            case ARROW_HIDE:
-                // shorten left end
-                if (isMorphingForward()) {
-                    float slideRatio = transformRatio(ratio, .4f, .9f);
-                    transformRatio = transformRatio(ratio, .5f, .9f);
-                    startX = (1 - slideRatio) * (startX + resolveStrokeModifier(1) / 2) + slideRatio * (startX - sidePadding / 6);
-                    stopX = (1 - transformRatio) * stopX + transformRatio * startX;
-                } else {
-                    float slide = transformRatio(ratio, .1f, 1) * sidePadding;
-                    transformRatio = transformRatio(ratio, .6f, 1);
-                    stopX += slide / 2;
-                    startX = (1 - transformRatio) * (startX + slide / 4 + resolveStrokeModifier(1) / 2) + transformRatio * stopX;
-                }
-                break;
-
-            case X_CHECK:
-                // fade in
-                alpha = (int) (ratio * 255);
-                // rotation to check angle
-                rotation = ratio * CHECK_MIDDLE_ANGLE;
-                // lengthen both ends
-                startX += ratio * (dip4 + dip3 / 2);
-                stopX += ratio * dip1;
-                pivotX = width / 2 + dip3 + diph;
-                break;
-
-            case X_HIDE:
-                // hide
-                alpha = 0;
-                break;
-
-            case CHECK_HIDE:
-                // rotate to required angle
-                rotation = CHECK_MIDDLE_ANGLE;
-                pivotX = width / 2 + dip3 + diph;
-                // change length
-                if (isMorphingForward()) {
-                    transformRatio = transformRatio(ratio, .3f, .9f);
-                    startX += dip4 + dip3 / 2;
-                    stopX = (1 - transformRatio) * (stopX + dip1 + diph / 2) + transformRatio * startX;
-                } else {
-                    transformRatio = transformRatio(ratio, 0, 0.7f);
-                    stopX -= 1.5 * diph;
-                    startX = (1 - transformRatio) * (startX + dip4 + dip3 / 2) + transformRatio * stopX;
-                }
-                break;
-        }
-
-        iconPaint.setAlpha(alpha);
-        canvas.rotate(rotation, pivotX, pivotY);
-        canvas.drawLine(startX, startY, stopX, stopY, iconPaint);
-        iconPaint.setAlpha(255);
     }
 
     private void drawTopLine(Canvas canvas, float ratio) {
@@ -427,16 +306,16 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         float rotation = 0, pivotX = 0, pivotY = 0;
         float rotation2 = 0;
         // pivot at center of line
-        float pivotX2 = width / 2 + dip3 / 2;
-        float pivotY2 = topPadding + dip2;
+        float pivotX2 = mWidth / 2 + mDip3 / 2;
+        float pivotY2 = mTopPadding + mDip2;
 
-        float startX = sidePadding;
-        float startY = topPadding + dip2;
-        float stopX = width - sidePadding;
-        float stopY = topPadding + dip2;
+        float startX = mSidePadding;
+        float startY = mTopPadding + mDip2;
+        float stopX = mWidth - mSidePadding;
+        float stopY = mTopPadding + mDip2;
         int alpha = 255;
 
-        switch (animationState) {
+        switch (mAnimationState) {
 
             case BURGER_ARROW:
                 if (isMorphingForward()) {
@@ -447,11 +326,11 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                     rotation = ARROW_BOT_LINE_ANGLE + (1 - ratio) * ARROW_TOP_LINE_ANGLE;
                 }
                 // rotate by middle
-                pivotX = width / 2;
-                pivotY = height / 2;
+                pivotX = mWidth / 2;
+                pivotY = mHeight / 2;
                 // shorten both ends
                 stopX -= resolveStrokeModifier(ratio);
-                startX += dip3 * ratio;
+                startX += mDip3 * ratio;
                 break;
 
             case BURGER_X:
@@ -459,10 +338,10 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 rotation = X_TOP_LINE_ANGLE * ratio;
                 rotation2 = X_ROTATION_ANGLE * ratio;
                 // pivot at left corner of line
-                pivotX = sidePadding + dip4;
-                pivotY = topPadding + dip3;
+                pivotX = mSidePadding + mDip4;
+                pivotY = mTopPadding + mDip3;
                 // shorten one end
-                startX += dip3 * ratio;
+                startX += mDip3 * ratio;
                 break;
 
             case BURGER_CHECK:
@@ -485,11 +364,11 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 rotation = ARROW_BOT_LINE_ANGLE + (X_TOP_LINE_ANGLE - ARROW_BOT_LINE_ANGLE) * ratio;
                 rotation2 = X_ROTATION_ANGLE * ratio;
                 // move pivot from ARROW pivot to X pivot
-                pivotX = width / 2 + (sidePadding + dip4 - width / 2) * ratio;
-                pivotY = height / 2 + (topPadding + dip3 - height / 2) * ratio;
+                pivotX = mWidth / 2 + (mSidePadding + mDip4 - mWidth / 2) * ratio;
+                pivotY = mHeight / 2 + (mTopPadding + mDip3 - mHeight / 2) * ratio;
                 // lengthen both ends
                 stopX -= resolveStrokeModifier(ratio);
-                startX += dip3;
+                startX += mDip3;
                 break;
 
             case ARROW_CHECK:
@@ -497,21 +376,21 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 alpha = (int) ((1 - ratio) * 255);
                 // retain starting arrow configuration
                 rotation = ARROW_BOT_LINE_ANGLE;
-                pivotX = width / 2;
-                pivotY = height / 2;
+                pivotX = mWidth / 2;
+                pivotY = mHeight / 2;
                 // shorted both ends
                 stopX -= resolveStrokeModifier(1);
-                startX += dip3;
+                startX += mDip3;
                 break;
 
             case ARROW_HIDE:
                 // rotate to required angle
                 rotation = ARROW_BOT_LINE_ANGLE;
                 // rotate by middle
-                pivotX = width / 2;
-                pivotY = height / 2;
+                pivotX = mWidth / 2;
+                pivotY = mHeight / 2;
                 // slide
-                float slide = isMorphingForward() ? 0 : transformRatio(ratio, .1f, 1) * sidePadding / 8;
+                float slide = isMorphingForward() ? 0 : transformRatio(ratio, .1f, 1) * mSidePadding / 8;
                 startY += slide;
                 stopY += slide;
                 // shorten left ends
@@ -520,7 +399,7 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 transformRatio = transformRatio(ratio,
                         isMorphingForward() ? .0f : 0,
                         isMorphingForward() ? .5f : .4f);
-                startX = (1 - transformRatio) * (startX - slide + dip3) + transformRatio * (stopX + dip2);
+                startX = (1 - transformRatio) * (startX - slide + mDip3) + transformRatio * (stopX + mDip2);
                 if (startX > stopX) {
                     startX = stopX;
                 }
@@ -530,10 +409,10 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // retain X configuration
                 rotation = X_TOP_LINE_ANGLE;
                 rotation2 = X_ROTATION_ANGLE;
-                pivotX = sidePadding + dip4;
-                pivotY = topPadding + dip3;
-                stopX += dip3 - dip3 * (1 - ratio);
-                startX += dip3;
+                pivotX = mSidePadding + mDip4;
+                pivotY = mTopPadding + mDip3;
+                stopX += mDip3 - mDip3 * (1 - ratio);
+                startX += mDip3;
                 // fade out
                 alpha = (int) ((1 - ratio) * 255);
                 break;
@@ -543,8 +422,8 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 rotation = X_TOP_LINE_ANGLE;
                 rotation2 = X_ROTATION_ANGLE;
                 // pivot at left corner of line
-                pivotX = sidePadding + dip4;
-                pivotY = topPadding + dip3;
+                pivotX = mSidePadding + mDip4;
+                pivotY = mTopPadding + mDip3;
                 // shorten one end
                 if (isMorphingForward()) {
                     transformRatio = transformRatio(ratio, .4f, .92f);
@@ -552,10 +431,10 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                     transformRatio = transformRatio(ratio, 0, .5f);
                 }
                 if (isMorphingForward()) {
-                    startX += dip3;
+                    startX += mDip3;
                     stopX = (1 - transformRatio) * stopX + transformRatio * startX;
                 } else {
-                    startX = (1 - transformRatio) * (startX + dip3) + transformRatio * stopX;
+                    startX = (1 - transformRatio) * (startX + mDip3) + transformRatio * stopX;
                 }
                 break;
 
@@ -565,11 +444,133 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
         }
 
-        iconPaint.setAlpha(alpha);
+        mIconPaint.setAlpha(alpha);
         canvas.rotate(rotation, pivotX, pivotY);
         canvas.rotate(rotation2, pivotX2, pivotY2);
-        canvas.drawLine(startX, startY, stopX, stopY, iconPaint);
-        iconPaint.setAlpha(255);
+        canvas.drawLine(startX, startY, stopX, stopY, mIconPaint);
+        mIconPaint.setAlpha(255);
+    }
+
+    private void drawMiddleLine(Canvas canvas, float ratio) {
+        canvas.restore();
+        canvas.save();
+
+        float transformRatio;
+
+        float rotation = 0;
+        float pivotX = mWidth / 2;
+        float pivotY = mWidth / 2;
+        float startX = mSidePadding;
+        float startY = mTopPadding + mDip3 / 2 * 5;
+        float stopX = mWidth - mSidePadding;
+        float stopY = mTopPadding + mDip3 / 2 * 5;
+        int alpha = 255;
+
+        switch (mAnimationState) {
+
+            case BURGER_ARROW:
+                // rotate by 180
+                if (isMorphingForward()) {
+                    rotation = ratio * ARROW_MID_LINE_ANGLE;
+                } else {
+                    rotation = ARROW_MID_LINE_ANGLE + (1 - ratio) * ARROW_MID_LINE_ANGLE;
+                }
+                // shorten one end
+                stopX -= ratio * resolveStrokeModifier(ratio) / 2;
+                break;
+
+            case BURGER_X:
+                // fade out
+                alpha = (int) ((1 - ratio) * 255);
+                break;
+
+            case BURGER_CHECK:
+                // rotate until required angle
+                rotation = ratio * CHECK_MIDDLE_ANGLE;
+                // lengthen both ends
+                startX += ratio * (mDip4 + mDip3 / 2);
+                stopX += ratio * mDip1;
+                pivotX = mWidth / 2 + mDip3 + mDipH;
+                break;
+
+            case BURGER_HIDE:
+                transformRatio = transformRatio(ratio, .2f, .8f);
+                startX = (1 - transformRatio) * startX + transformRatio * startX / 1.5f;
+                stopX = (1 - transformRatio) * stopX + transformRatio * startX;
+                break;
+
+            case ARROW_X:
+                // fade out and shorten one end
+                alpha = (int) ((1 - ratio) * 255);
+                startX += (1 - ratio) * mDip2;
+                break;
+
+            case ARROW_CHECK:
+                if (isMorphingForward()) {
+                    // rotate until required angle
+                    rotation = ratio * CHECK_MIDDLE_ANGLE;
+                } else {
+                    // rotate back to starting angle
+                    rotation = CHECK_MIDDLE_ANGLE - CHECK_MIDDLE_ANGLE * (1 - ratio);
+                }
+                // shorten one end and lengthen the other
+                startX += mDip3 / 2 + mDip4 - (1 - ratio) * mDip2;
+                stopX += ratio * mDip1;
+                pivotX = mWidth / 2 + mDip3 + mDipH;
+                break;
+
+            case ARROW_HIDE:
+                // shorten left end
+                if (isMorphingForward()) {
+                    float slideRatio = transformRatio(ratio, .4f, .9f);
+                    transformRatio = transformRatio(ratio, .5f, .9f);
+                    startX = (1 - slideRatio) * (startX + resolveStrokeModifier(1) / 2) + slideRatio * (startX - mSidePadding / 6);
+                    stopX = (1 - transformRatio) * stopX + transformRatio * startX;
+                } else {
+                    float slide = transformRatio(ratio, .1f, 1) * mSidePadding;
+                    transformRatio = transformRatio(ratio, .6f, 1);
+                    stopX += slide / 2;
+                    startX = (1 - transformRatio) * (startX + slide / 4 + resolveStrokeModifier(1) / 2) + transformRatio * stopX;
+                }
+                break;
+
+            case X_CHECK:
+                // fade in
+                alpha = (int) (ratio * 255);
+                // rotation to check angle
+                rotation = ratio * CHECK_MIDDLE_ANGLE;
+                // lengthen both ends
+                startX += ratio * (mDip4 + mDip3 / 2);
+                stopX += ratio * mDip1;
+                pivotX = mWidth / 2 + mDip3 + mDipH;
+                break;
+
+            case X_HIDE:
+                // hide
+                alpha = 0;
+                break;
+
+            case CHECK_HIDE:
+                // rotate to required angle
+                rotation = CHECK_MIDDLE_ANGLE;
+                pivotX = mWidth / 2 + mDip3 + mDipH;
+                // change length
+                if (isMorphingForward()) {
+                    transformRatio = transformRatio(ratio, .3f, .9f);
+                    startX += mDip4 + mDip3 / 2;
+                    stopX = (1 - transformRatio) * (stopX + mDip1 + mDipH / 2) + transformRatio * startX;
+                } else {
+                    transformRatio = transformRatio(ratio, 0, 0.7f);
+                    stopX -= 1.5 * mDipH;
+                    startX = (1 - transformRatio) * (startX + mDip4 + mDip3 / 2) + transformRatio * stopX;
+                }
+                break;
+        }
+
+        mIconPaint.setAlpha(alpha);
+        canvas.rotate(rotation, pivotX, pivotY);
+        canvas.drawLine(startX, startY, stopX, stopY, mIconPaint);
+        mIconPaint.setAlpha(255);
     }
 
     private void drawBottomLine(Canvas canvas, float ratio) {
@@ -581,16 +582,16 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         float rotation = 0, pivotX = 0, pivotY = 0;
         float rotation2 = 0;
         // pivot at center of line
-        float pivotX2 = width / 2 + dip3 / 2;
-        float pivotY2 = height - topPadding - dip2;
+        float pivotX2 = mWidth / 2 + mDip3 / 2;
+        float pivotY2 = mHeight - mTopPadding - mDip2;
 
-        float startX = sidePadding;
-        float startY = height - topPadding - dip2;
-        float stopX = width - sidePadding;
-        float stopY = height - topPadding - dip2;
+        float startX = mSidePadding;
+        float startY = mHeight - mTopPadding - mDip2;
+        float stopX = mWidth - mSidePadding;
+        float stopY = mHeight - mTopPadding - mDip2;
         int alpha = 255;
 
-        switch (animationState) {
+        switch (mAnimationState) {
 
             case BURGER_ARROW:
                 if (isMorphingForward()) {
@@ -601,11 +602,11 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                     rotation = ARROW_TOP_LINE_ANGLE + (1 - ratio) * ARROW_BOT_LINE_ANGLE;
                 }
                 // pivot center of canvas
-                pivotX = width / 2;
-                pivotY = height / 2;
+                pivotX = mWidth / 2;
+                pivotY = mHeight / 2;
                 // shorten both ends
-                stopX = width - sidePadding - resolveStrokeModifier(ratio);
-                startX = sidePadding + dip3 * ratio;
+                stopX = mWidth - mSidePadding - resolveStrokeModifier(ratio);
+                startX = mSidePadding + mDip3 * ratio;
                 break;
 
             case BURGER_X:
@@ -619,20 +620,20 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // rotate to required angle
                 rotation = X_BOT_LINE_ANGLE * ratio;
                 // pivot left corner of line
-                pivotX = sidePadding + dip4;
-                pivotY = height - topPadding - dip3;
+                pivotX = mSidePadding + mDip4;
+                pivotY = mHeight - mTopPadding - mDip3;
                 // shorten one end
-                startX += dip3 * ratio;
+                startX += mDip3 * ratio;
                 break;
 
             case BURGER_CHECK:
                 // rotate from ARROW angle to CHECK angle
                 rotation = ratio * (CHECK_BOTTOM_ANGLE + ARROW_TOP_LINE_ANGLE);
                 // move pivot from BURGER pivot to CHECK pivot
-                pivotX = width / 2 + dip3 * ratio;
-                pivotY = height / 2 - dip3 * ratio;
+                pivotX = mWidth / 2 + mDip3 * ratio;
+                pivotY = mHeight / 2 - mDip3 * ratio;
                 // length stays same as BURGER
-                startX += dip8 * ratio;
+                startX += mDip8 * ratio;
                 stopX -= resolveStrokeModifier(ratio);
                 break;
 
@@ -651,41 +652,41 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 rotation = ARROW_TOP_LINE_ANGLE + (360 + X_BOT_LINE_ANGLE - ARROW_TOP_LINE_ANGLE) * ratio;
                 rotation2 = -X_ROTATION_ANGLE * ratio;
                 // move pivot from ARROW pivot to X pivot
-                pivotX = width / 2 + (sidePadding + dip4 - width / 2) * ratio;
-                pivotY = height / 2 + (height / 2 - topPadding - dip3) * ratio;
+                pivotX = mWidth / 2 + (mSidePadding + mDip4 - mWidth / 2) * ratio;
+                pivotY = mHeight / 2 + (mHeight / 2 - mTopPadding - mDip3) * ratio;
                 // lengthen both ends
                 stopX -= resolveStrokeModifier(ratio);
-                startX += dip3;
+                startX += mDip3;
                 break;
 
             case ARROW_CHECK:
                 // rotate from ARROW angle to CHECK angle
                 rotation = ARROW_TOP_LINE_ANGLE + ratio * CHECK_BOTTOM_ANGLE;
                 // move pivot from ARROW pivot to CHECK pivot
-                pivotX = width / 2 + dip3 * ratio;
-                pivotY = height / 2 - dip3 * ratio;
+                pivotX = mWidth / 2 + mDip3 * ratio;
+                pivotY = mHeight / 2 - mDip3 * ratio;
                 // length stays same as ARROW
                 stopX -= resolveStrokeModifier(1);
-                startX += dip3 + (dip4 + dip1) * ratio;
+                startX += mDip3 + (mDip4 + mDip1) * ratio;
                 break;
 
             case ARROW_HIDE:
                 // rotate to required angle
                 rotation = ARROW_TOP_LINE_ANGLE;
                 // pivot center of canvas
-                pivotX = width / 2;
-                pivotY = height / 2;
+                pivotX = mWidth / 2;
+                pivotY = mHeight / 2;
                 // slide
-                float slide = isMorphingForward() ? 0 : transformRatio(ratio, .1f, 1) * sidePadding / 8;
+                float slide = isMorphingForward() ? 0 : transformRatio(ratio, .1f, 1) * mSidePadding / 8;
                 startY -= slide;
                 stopY -= slide;
                 // shorten left ends
-                stopX = width - sidePadding - resolveStrokeModifier(1) - slide;
+                stopX = mWidth - mSidePadding - resolveStrokeModifier(1) - slide;
                 // shorten right ends
                 transformRatio = transformRatio(ratio,
                         isMorphingForward() ? .3f : .1f,
                         isMorphingForward() ? .8f : .6f);
-                startX = (1 - transformRatio) * (sidePadding - slide + dip3) + transformRatio * (stopX + dip2);
+                startX = (1 - transformRatio) * (mSidePadding - slide + mDip3) + transformRatio * (stopX + mDip2);
                 if (startX > stopX) {
                     startX = stopX;
                 }
@@ -696,10 +697,10 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 rotation2 = -X_ROTATION_ANGLE * (1 - ratio);
                 rotation = X_BOT_LINE_ANGLE + (CHECK_BOTTOM_ANGLE + ARROW_TOP_LINE_ANGLE - X_BOT_LINE_ANGLE) * ratio;
                 // move pivot from X to CHECK
-                pivotX = sidePadding + dip4 + (width / 2 + dip3 - sidePadding - dip4) * ratio;
-                pivotY = height - topPadding - dip3 + (topPadding + height / 2 - height) * ratio;
+                pivotX = mSidePadding + mDip4 + (mWidth / 2 + mDip3 - mSidePadding - mDip4) * ratio;
+                pivotY = mHeight - mTopPadding - mDip3 + (mTopPadding + mHeight / 2 - mHeight) * ratio;
                 // shorten both ends
-                startX += dip8 - (dip4 + dip1) * (1 - ratio);
+                startX += mDip8 - (mDip4 + mDip1) * (1 - ratio);
                 stopX -= resolveStrokeModifier(1 - ratio);
                 break;
 
@@ -708,8 +709,8 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 rotation = X_BOT_LINE_ANGLE;
                 rotation2 = -X_ROTATION_ANGLE;
                 // pivot left corner of line
-                pivotX = sidePadding + dip4;
-                pivotY = height - topPadding - dip3;
+                pivotX = mSidePadding + mDip4;
+                pivotY = mHeight - mTopPadding - mDip3;
                 // shorten one end
                 if (isMorphingForward()) {
                     transformRatio = transformRatio(ratio, 0, .6f);
@@ -717,10 +718,10 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                     transformRatio = transformRatio(ratio, .3f, 1);
                 }
                 if (isMorphingForward()) {
-                    startX += dip3;
+                    startX += mDip3;
                     stopX = (1 - transformRatio) * stopX + transformRatio * startX;
                 } else {
-                    startX = (1 - transformRatio) * (startX + dip3) + transformRatio * stopX;
+                    startX = (1 - transformRatio) * (startX + mDip3) + transformRatio * stopX;
                 }
                 break;
 
@@ -728,58 +729,59 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // rotate to required angle
                 rotation = CHECK_BOTTOM_ANGLE + ARROW_TOP_LINE_ANGLE;
                 // move pivot from BURGER pivot to CHECK pivot
-                pivotX = width / 2 + dip3;
-                pivotY = height / 2 - dip3;
+                pivotX = mWidth / 2 + mDip3;
+                pivotY = mHeight / 2 - mDip3;
                 // change length
                 if (isMorphingForward()) {
                     transformRatio = transformRatio(ratio, 0, .3f);
-                    stopX -= resolveStrokeModifier(1) + dip2;
-                    startX = (1 - transformRatio) * (startX + dip8) + transformRatio * stopX;
+                    stopX -= resolveStrokeModifier(1) + mDip2;
+                    startX = (1 - transformRatio) * (startX + mDip8) + transformRatio * stopX;
                 } else {
                     transformRatio = transformRatio(ratio, .7f, 1);
-                    startX += dip8;
+                    startX += mDip8;
                     stopX = (1 - transformRatio) * (stopX - resolveStrokeModifier(1)) + transformRatio * startX;
                 }
                 break;
         }
 
-        iconPaint.setAlpha(alpha);
+        mIconPaint.setAlpha(alpha);
         canvas.rotate(rotation, pivotX, pivotY);
         canvas.rotate(rotation2, pivotX2, pivotY2);
-        canvas.drawLine(startX, startY, stopX, stopY, iconPaint);
-        iconPaint.setAlpha(255);
+        canvas.drawLine(startX, startY, stopX, stopY, mIconPaint);
+        mIconPaint.setAlpha(255);
     }
 
     private boolean isMorphingForward() {
-        return transformationValue <= TRANSFORMATION_MID;
+        return mTransformationValue <= TRANSFORMATION_MID;
     }
 
     private float resolveStrokeModifier(float ratio) {
-        switch (stroke) {
+        switch (mStroke) {
             case BOLD:
-                if (animationState == AnimationState.ARROW_X || animationState == AnimationState.X_CHECK) {
-                    return dip3 - (dip3 * ratio);
+                if (mAnimationState == AnimationState.ARROW_X || mAnimationState == AnimationState.X_CHECK) {
+                    return mDip3 - (mDip3 * ratio);
                 }
-                return ratio * dip3;
+                return ratio * mDip3;
             case REGULAR:
-                if (animationState == AnimationState.ARROW_X || animationState == AnimationState.X_CHECK) {
-                    return dip3 + diph - (dip3 + diph) * ratio;
+                if (mAnimationState == AnimationState.ARROW_X || mAnimationState == AnimationState.X_CHECK) {
+                    return mDip3 + mDipH - (mDip3 + mDipH) * ratio;
                 }
-                return ratio * (dip3 + diph);
+                return ratio * (mDip3 + mDipH);
             case THIN:
-                if (animationState == AnimationState.ARROW_X || animationState == AnimationState.X_CHECK) {
-                    return dip4 - ((dip3 + dip1) * ratio);
+                if (mAnimationState == AnimationState.ARROW_X || mAnimationState == AnimationState.X_CHECK) {
+                    return mDip4 - ((mDip3 + mDip1) * ratio);
                 }
-                return ratio * dip4;
+                return ratio * mDip4;
         }
         return 0;
     }
 
     /**
      * Translate ratio to specific start and end points
-     * @param ratio         current ratio
-     * @param startPoint    start point [0, 1)
-     * @param endPoint      end point (0, 1]
+     *
+     * @param ratio      current ratio
+     * @param startPoint start point [0, 1)
+     * @param endPoint   end point (0, 1]
      * @return Translated current ratio value depends on start and end points
      */
     private float transformRatio(float ratio, float startPoint, float endPoint) {
@@ -792,15 +794,18 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         }
     }
 
-    @Override public void setAlpha(int alpha) {
-        iconPaint.setAlpha(alpha);
+    @Override
+    public void setAlpha(int alpha) {
+        mIconPaint.setAlpha(alpha);
     }
 
-    @Override public void setColorFilter(ColorFilter cf) {
-        iconPaint.setColorFilter(cf);
+    @Override
+    public void setColorFilter(ColorFilter cf) {
+        mIconPaint.setColorFilter(cf);
     }
 
-    @Override public int getOpacity() {
+    @Override
+    public int getOpacity() {
         return PixelFormat.TRANSPARENT;
     }
 
@@ -809,68 +814,68 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
      */
 
     public void setColor(int color) {
-        iconPaint.setColor(color);
-        circlePaint.setColor(color);
+        mIconPaint.setColor(color);
+        mCirclePaint.setColor(color);
         invalidateSelf();
     }
 
     public void setTransformationDuration(int duration) {
-        transformation.setDuration(duration);
+        mTransformation.setDuration(duration);
     }
 
     public void setInterpolator(Interpolator interpolator) {
-        transformation.setInterpolator(interpolator);
+        mTransformation.setInterpolator(interpolator);
     }
 
     public void setAnimationListener(AnimatorListener listener) {
-        if (animatorListener != null) {
-            transformation.removeListener(animatorListener);
+        if (mAnimatorListener != null) {
+            mTransformation.removeListener(mAnimatorListener);
         }
 
         if (listener != null) {
-            transformation.addListener(listener);
+            mTransformation.addListener(listener);
         }
 
-        animatorListener = listener;
+        mAnimatorListener = listener;
     }
 
     public void setIconState(IconState iconState) {
-        synchronized (lock) {
-            if (transformationRunning) {
-                transformation.cancel();
-                transformationRunning = false;
+        synchronized (mLock) {
+            if (mTransformationRunning) {
+                mTransformation.cancel();
+                mTransformationRunning = false;
             }
 
-            if (currentIconState == iconState) return;
+            if (mCurrentIconState == iconState) return;
 
             switch (iconState) {
                 case BURGER:
-                    animationState = AnimationState.BURGER_ARROW;
-                    transformationValue = TRANSFORMATION_START;
+                    mAnimationState = AnimationState.BURGER_ARROW;
+                    mTransformationValue = TRANSFORMATION_START;
                     break;
                 case ARROW:
-                    animationState = AnimationState.BURGER_ARROW;
-                    transformationValue = TRANSFORMATION_MID;
+                    mAnimationState = AnimationState.BURGER_ARROW;
+                    mTransformationValue = TRANSFORMATION_MID;
                     break;
                 case X:
-                    animationState = AnimationState.BURGER_X;
-                    transformationValue = TRANSFORMATION_MID;
+                    mAnimationState = AnimationState.BURGER_X;
+                    mTransformationValue = TRANSFORMATION_MID;
                     break;
                 case CHECK:
-                    animationState = AnimationState.BURGER_CHECK;
-                    transformationValue = TRANSFORMATION_MID;
+                    mAnimationState = AnimationState.BURGER_CHECK;
+                    mTransformationValue = TRANSFORMATION_MID;
             }
-            currentIconState = iconState;
+            mCurrentIconState = iconState;
             invalidateSelf();
         }
     }
 
     public void animateIconState(IconState state) {
-        synchronized (lock) {
-            if (transformationRunning) {
-                transformation.end();
+        synchronized (mLock) {
+            if (mTransformationRunning) {
+                mTransformation.end();
             }
-            animatingIconState = state;
+            mAnimatingIconState = state;
             start();
         }
     }
@@ -878,45 +883,45 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
     public IconState setTransformationOffset(AnimationState animationState, float offset) {
         if (offset < TRANSFORMATION_START || offset > TRANSFORMATION_END) {
             throw new IllegalArgumentException(
-                String.format("Value must be between %s and %s", TRANSFORMATION_START, TRANSFORMATION_END)
+                    String.format("Value must be between %s and %s", TRANSFORMATION_START, TRANSFORMATION_END)
             );
         }
 
-        this.animationState = animationState;
+        mAnimationState = animationState;
 
         final boolean isFirstIcon = offset < TRANSFORMATION_MID || offset == TRANSFORMATION_END;
 
-        currentIconState = isFirstIcon ? animationState.getFirstState() : animationState.getSecondState();
-        animatingIconState = isFirstIcon ? animationState.getSecondState() : animationState.getFirstState();
+        mCurrentIconState = isFirstIcon ? animationState.getFirstState() : animationState.getSecondState();
+        mAnimatingIconState = isFirstIcon ? animationState.getSecondState() : animationState.getFirstState();
 
         setTransformationValue(offset);
 
-        return currentIconState;
+        return mCurrentIconState;
     }
 
     public void setVisible(boolean visible) {
-        this.visible = visible;
+        mVisible = visible;
         invalidateSelf();
     }
 
     public void setRTLEnabled(boolean rtlEnabled) {
-        this.rtlEnabled = rtlEnabled;
+        mRtlEnabled = rtlEnabled;
         invalidateSelf();
     }
 
     public IconState getIconState() {
-        return currentIconState;
+        return mCurrentIconState;
     }
 
     public boolean isDrawableVisible() {
-        return visible;
+        return mVisible;
     }
 
     /*
      * Animations
      */
     private Property<MaterialMenuDrawable, Float> transformationProperty
-        = new Property<MaterialMenuDrawable, Float>(Float.class, "transformation") {
+            = new Property<MaterialMenuDrawable, Float>(Float.class, "transformation") {
         @Override
         public Float get(MaterialMenuDrawable object) {
             return object.getTransformationValue();
@@ -929,138 +934,146 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
     };
 
     public Float getTransformationValue() {
-        return transformationValue;
+        return mTransformationValue;
     }
 
     public void setTransformationValue(Float value) {
-        this.transformationValue = value;
+        mTransformationValue = value;
         invalidateSelf();
     }
 
     private void initAnimations(int transformDuration) {
-        transformation = ObjectAnimator.ofFloat(this, transformationProperty, 0);
-        transformation.setInterpolator(new DecelerateInterpolator(3));
-        transformation.setDuration(transformDuration);
-        transformation.addListener(new AnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(Animator animation) {
-                transformationRunning = false;
-                setIconState(animatingIconState);
+        mTransformation = ObjectAnimator.ofFloat(this, transformationProperty, 0);
+        mTransformation.setInterpolator(new DecelerateInterpolator(3));
+        mTransformation.setDuration(transformDuration);
+        mTransformation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mTransformationRunning = false;
+                setIconState(mAnimatingIconState);
             }
         });
     }
 
     private boolean resolveTransformation() {
-        boolean isCurrentBurger = currentIconState == IconState.BURGER;
-        boolean isCurrentArrow = currentIconState == IconState.ARROW;
-        boolean isCurrentX = currentIconState == IconState.X;
-        boolean isCurrentCheck = currentIconState == IconState.CHECK;
-        boolean isCurrentHide = currentIconState == IconState.HIDE;
-        boolean isAnimatingBurger = animatingIconState == IconState.BURGER;
-        boolean isAnimatingArrow = animatingIconState == IconState.ARROW;
-        boolean isAnimatingX = animatingIconState == IconState.X;
-        boolean isAnimatingCheck = animatingIconState == IconState.CHECK;
-        boolean isAnimatingHide = animatingIconState == IconState.HIDE;
+        boolean isCurrentBurger = mCurrentIconState == IconState.BURGER;
+        boolean isCurrentArrow = mCurrentIconState == IconState.ARROW;
+        boolean isCurrentX = mCurrentIconState == IconState.X;
+        boolean isCurrentCheck = mCurrentIconState == IconState.CHECK;
+        boolean isCurrentHide = mCurrentIconState == IconState.HIDE;
+        boolean isAnimatingBurger = mAnimatingIconState == IconState.BURGER;
+        boolean isAnimatingArrow = mAnimatingIconState == IconState.ARROW;
+        boolean isAnimatingX = mAnimatingIconState == IconState.X;
+        boolean isAnimatingCheck = mAnimatingIconState == IconState.CHECK;
+        boolean isAnimatingHide = mAnimatingIconState == IconState.HIDE;
 
         if ((isCurrentBurger && isAnimatingArrow) || (isCurrentArrow && isAnimatingBurger)) {
-            animationState = AnimationState.BURGER_ARROW;
+            mAnimationState = AnimationState.BURGER_ARROW;
             return isCurrentBurger;
         }
 
         if ((isCurrentBurger && isAnimatingX) || (isCurrentX && isAnimatingBurger)) {
-            animationState = AnimationState.BURGER_X;
+            mAnimationState = AnimationState.BURGER_X;
             return isCurrentBurger;
         }
 
         if ((isCurrentBurger && isAnimatingCheck) || (isCurrentCheck && isAnimatingBurger)) {
-            animationState = AnimationState.BURGER_CHECK;
+            mAnimationState = AnimationState.BURGER_CHECK;
             return isCurrentBurger;
         }
 
         if ((isCurrentBurger && isAnimatingHide) || (isCurrentHide && isAnimatingBurger)) {
-            animationState = AnimationState.BURGER_HIDE;
+            mAnimationState = AnimationState.BURGER_HIDE;
             return isCurrentBurger;
         }
 
         if ((isCurrentArrow && isAnimatingX) || (isCurrentX && isAnimatingArrow)) {
-            animationState = AnimationState.ARROW_X;
+            mAnimationState = AnimationState.ARROW_X;
             return isCurrentArrow;
         }
 
         if ((isCurrentArrow && isAnimatingCheck) || (isCurrentCheck && isAnimatingArrow)) {
-            animationState = AnimationState.ARROW_CHECK;
+            mAnimationState = AnimationState.ARROW_CHECK;
             return isCurrentArrow;
         }
 
         if ((isCurrentArrow && isAnimatingHide) || (isCurrentHide && isAnimatingArrow)) {
-            animationState = AnimationState.ARROW_HIDE;
+            mAnimationState = AnimationState.ARROW_HIDE;
             return isCurrentArrow;
         }
 
         if ((isCurrentX && isAnimatingCheck) || (isCurrentCheck && isAnimatingX)) {
-            animationState = AnimationState.X_CHECK;
+            mAnimationState = AnimationState.X_CHECK;
             return isCurrentX;
         }
 
         if ((isCurrentX && isAnimatingHide) || (isCurrentHide && isAnimatingX)) {
-            animationState = AnimationState.X_HIDE;
+            mAnimationState = AnimationState.X_HIDE;
             return isCurrentX;
         }
 
         if ((isCurrentCheck && isAnimatingHide) || (isCurrentHide && isAnimatingCheck)) {
-            animationState = AnimationState.CHECK_HIDE;
+            mAnimationState = AnimationState.CHECK_HIDE;
             return isCurrentCheck;
         }
 
         throw new IllegalStateException(
-            String.format("Animating from %s to %s is not supported", currentIconState, animatingIconState)
+                String.format("Animating from %s to %s is not supported", mCurrentIconState, mAnimatingIconState)
         );
     }
 
-    @Override public void start() {
-        if (transformationRunning) return;
+    @Override
+    public void start() {
+        if (mTransformationRunning) return;
 
-        if (animatingIconState != null && animatingIconState != currentIconState) {
-            transformationRunning = true;
+        if (mAnimatingIconState != null && mAnimatingIconState != mCurrentIconState) {
+            mTransformationRunning = true;
 
             final boolean direction = resolveTransformation();
-            transformation.setFloatValues(
-                direction ? TRANSFORMATION_START : TRANSFORMATION_MID,
-                direction ? TRANSFORMATION_MID : TRANSFORMATION_END
+            mTransformation.setFloatValues(
+                    direction ? TRANSFORMATION_START : TRANSFORMATION_MID,
+                    direction ? TRANSFORMATION_MID : TRANSFORMATION_END
             );
-            transformation.start();
+            mTransformation.start();
         }
 
         invalidateSelf();
     }
 
-    @Override public void stop() {
-        if (isRunning() && transformation.isRunning()) {
-            transformation.end();
+    @Override
+    public void stop() {
+        if (isRunning() && mTransformation.isRunning()) {
+            mTransformation.end();
         } else {
-            transformationRunning = false;
+            mTransformationRunning = false;
             invalidateSelf();
         }
     }
 
-    @Override public boolean isRunning() {
-        return transformationRunning;
+    @Override
+    public boolean isRunning() {
+        return mTransformationRunning;
     }
 
-    @Override public int getIntrinsicWidth() {
-        return width;
+    @Override
+    public int getIntrinsicWidth() {
+        return mWidth;
     }
 
-    @Override public int getIntrinsicHeight() {
-        return height;
+    @Override
+    public int getIntrinsicHeight() {
+        return mHeight;
     }
 
-    @Override public ConstantState getConstantState() {
-        materialMenuState.changingConfigurations = getChangingConfigurations();
-        return materialMenuState;
+    @Override
+    public ConstantState getConstantState() {
+        mMaterialMenuState.changingConfigurations = getChangingConfigurations();
+        return mMaterialMenuState;
     }
 
-    @Override public Drawable mutate() {
-        materialMenuState = new MaterialMenuState();
+    @Override
+    public Drawable mutate() {
+        mMaterialMenuState = new MaterialMenuState();
         return this;
     }
 
@@ -1070,18 +1083,20 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
         private MaterialMenuState() {
         }
 
-        @Override public Drawable newDrawable() {
+        @Override
+        public Drawable newDrawable() {
             MaterialMenuDrawable drawable = new MaterialMenuDrawable(
-                circlePaint.getColor(), stroke, transformation.getDuration(),
-                width, height, iconWidth, circleRadius, strokeWidth, dip1
+                    mCirclePaint.getColor(), mStroke, mTransformation.getDuration(),
+                    mWidth, mHeight, mIconWidth, mCircleRadius, mStrokeWidth, mDip1
             );
-            drawable.setIconState(animatingIconState != null ? animatingIconState : currentIconState);
-            drawable.setVisible(visible);
-            drawable.setRTLEnabled(rtlEnabled);
+            drawable.setIconState(mAnimatingIconState != null ? mAnimatingIconState : mCurrentIconState);
+            drawable.setVisible(mVisible);
+            drawable.setRTLEnabled(mRtlEnabled);
             return drawable;
         }
 
-        @Override public int getChangingConfigurations() {
+        @Override
+        public int getChangingConfigurations() {
             return changingConfigurations;
         }
     }
