@@ -364,9 +364,11 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case ARROW_HIDE:
+                float transformRatio = translateRatio(ratio, .6f, 1);
                 // shorten left end
-                ratio = translateRatio(ratio, .6f, 1);
-                startX = (1 - ratio) * (startX + resolveStrokeModifier(1) / 2) + ratio * stopX;
+                float slide = translateRatio(ratio, .1f, 1) * sidePadding / 4f;
+                stopX += slide;
+                startX = (1 - transformRatio) * (startX + slide + resolveStrokeModifier(1) / 2) + transformRatio * stopX;
                 if (ratio >= .993) {
                     alpha = 0;
                 }
@@ -490,16 +492,20 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case ARROW_HIDE:
+                float transformRatio = translateRatio(ratio, 0, .4f);
                 // rotate to required angle
                 rotation = ARROW_BOT_LINE_ANGLE;
                 // rotate by middle
                 pivotX = width / 2;
                 pivotY = height / 2;
+                // slide
+                float slide = translateRatio(ratio, .1f, 1) * sidePadding / 8;
+                startY += slide;
+                stopY += slide;
                 // shorten left ends
-                stopX -= resolveStrokeModifier(1);
+                stopX -= resolveStrokeModifier(1) + slide;
                 // shorten right end
-                ratio = translateRatio(ratio, 0, .4f);
-                startX = (1-ratio) * (startX + dip3) + ratio * (stopX + dip2);
+                startX = (1 - transformRatio) * (startX - slide + dip3) + transformRatio * (stopX + dip2);
                 if (startX > stopX) {
                     startX = stopX;
                 }
@@ -639,16 +645,20 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case ARROW_HIDE:
+                float transformRatio = translateRatio(ratio, .05f, .6f);
                 // rotate to required angle
                 rotation = ARROW_TOP_LINE_ANGLE;
                 // pivot center of canvas
                 pivotX = width / 2;
                 pivotY = height / 2;
+                // slide
+                float slide = translateRatio(ratio, .1f, 1) * sidePadding / 8;
+                startY -= slide;
+                stopY -= slide;
                 // shorten left ends
-                stopX = width - sidePadding - resolveStrokeModifier(1);
+                stopX = width - sidePadding - resolveStrokeModifier(1) - slide;
                 // shorten right ends
-                ratio = translateRatio(ratio, .05f, .6f);
-                startX = (1-ratio) * (sidePadding + dip3) + ratio * (stopX + dip2);
+                startX = (1 - transformRatio) * (sidePadding - slide + dip3) + transformRatio * (stopX + dip2);
                 if (startX > stopX) {
                     startX = stopX;
                 }
