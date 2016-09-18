@@ -336,7 +336,6 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
             case BURGER_X:
                 // rotate until required angles
                 rotation = X_TOP_LINE_ANGLE * ratio;
-                rotation2 = X_ROTATION_ANGLE * ratio;
                 // pivot at left corner of line
                 pivotX = mSidePadding + mDip4;
                 pivotY = mTopPadding + mDip3;
@@ -480,8 +479,9 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case BURGER_X:
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                // shorten the length
+                transformRatio = transformRatio(ratio, 0, .9f);
+                stopX -= transformRatio * (stopX - startX);
                 break;
 
             case BURGER_CHECK:
@@ -610,14 +610,7 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case BURGER_X:
-                if (isMorphingForward()) {
-                    // rotate around
-                    rotation2 = -X_ROTATION_ANGLE * ratio;
-                } else {
-                    // rotate directly
-                    rotation2 = X_ROTATION_ANGLE * ratio;
-                }
-                // rotate to required angle
+                // rotate until required angles
                 rotation = X_BOT_LINE_ANGLE * ratio;
                 // pivot left corner of line
                 pivotX = mSidePadding + mDip4;
