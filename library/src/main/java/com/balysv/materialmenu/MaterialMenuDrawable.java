@@ -338,8 +338,9 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case BURGER_HIDE:
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                ratio = translateRatio(ratio, .2f, .8f);
+                startX = (1 - ratio) * startX + ratio * startX / 1.5f;
+                stopX = (1 - ratio) * stopX + ratio * startX;
                 break;
 
             case ARROW_X:
@@ -455,8 +456,13 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case BURGER_HIDE:
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                if (isMorphingForward()) {
+                    ratio = translateRatio(ratio, 0, .6f);
+                } else {
+                    ratio = translateRatio(ratio, .4f, .9f);
+                }
+                startX = (1 - ratio) * startX + ratio * startX / 1.5f;
+                stopX = (1 - ratio) * stopX + ratio * startX;
                 break;
 
             case ARROW_X:
@@ -600,8 +606,13 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 break;
 
             case BURGER_HIDE:
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                if (isMorphingForward()) {
+                    ratio = translateRatio(ratio, .4f, .9f);
+                } else {
+                    ratio = translateRatio(ratio, 0, .6f);
+                }
+                startX = (1 - ratio) * startX + ratio * startX / 1.5f;
+                stopX = (1 - ratio) * stopX + ratio * startX;
                 break;
 
             case ARROW_X:
