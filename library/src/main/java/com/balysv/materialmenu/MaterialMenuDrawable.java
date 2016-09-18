@@ -546,7 +546,11 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 pivotX = sidePadding + dip4;
                 pivotY = topPadding + dip3;
                 // shorten one end
-                transformRatio = transformRatio(ratio, .2f, .9f);
+                if (isMorphingForward()) {
+                    transformRatio = transformRatio(ratio, .4f, .92f);
+                } else {
+                    transformRatio = transformRatio(ratio, 0, .5f);
+                }
                 if (isMorphingForward()) {
                     startX += dip3;
                     stopX = (1 - transformRatio) * stopX + transformRatio * startX;
@@ -707,7 +711,11 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 pivotX = sidePadding + dip4;
                 pivotY = height - topPadding - dip3;
                 // shorten one end
-                transformRatio = transformRatio(ratio, 0, .7f);
+                if (isMorphingForward()) {
+                    transformRatio = transformRatio(ratio, 0, .6f);
+                } else {
+                    transformRatio = transformRatio(ratio, .3f, 1);
+                }
                 if (isMorphingForward()) {
                     startX += dip3;
                     stopX = (1 - transformRatio) * stopX + transformRatio * startX;
