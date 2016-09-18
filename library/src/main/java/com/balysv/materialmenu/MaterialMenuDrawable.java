@@ -369,16 +369,12 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // shorten left end
                 float slide = transformRatio(ratio, .1f, 1) * sidePadding;
                 if (isMorphingForward()) {
+                    transformRatio = transformRatio(ratio, .6f, .9f);
                     stopX += transformRatio(ratio, .7f, 1) * sidePadding / 2;
                 } else {
+                    transformRatio = transformRatio(ratio, .6f, 1);
                     stopX += slide / 2;
                 }
-
-                transformRatio = transformRatio(
-                        ratio,
-                        .6f,
-                        isMorphingForward() ? .9f : 1);
-
                 startX = (1 - transformRatio) * (startX + slide / 4 + resolveStrokeModifier(1) / 2) + transformRatio * stopX;
                 break;
 
@@ -401,12 +397,17 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
             case CHECK_HIDE:
                 // rotate to required angle
                 rotation = CHECK_MIDDLE_ANGLE;
-                // lengthen both ends
-                startX += dip4 + dip3 / 2;
-                stopX += dip1;
                 pivotX = width / 2 + dip3 + diph;
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                // change length
+                if (isMorphingForward()) {
+                    transformRatio = transformRatio(ratio, .3f, .9f);
+                    startX += dip4 + dip3 / 2;
+                    stopX = (1 - transformRatio) * (stopX + dip1 + diph / 2) + transformRatio * startX;
+                } else {
+                    transformRatio = transformRatio(ratio, 0, 0.7f);
+                    stopX -= 1.5 * diph;
+                    startX = (1 - transformRatio) * (startX + dip4 + dip3 / 2) + transformRatio * stopX;
+                }
                 break;
         }
 
@@ -715,11 +716,16 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 // move pivot from BURGER pivot to CHECK pivot
                 pivotX = width / 2 + dip3;
                 pivotY = height / 2 - dip3;
-                // length stays same as BURGER
-                startX += dip8;
-                stopX -= resolveStrokeModifier(1);
-                // fade out
-                alpha = (int) ((1 - ratio) * 255);
+                // change length
+                if (isMorphingForward()) {
+                    transformRatio = transformRatio(ratio, 0, .3f);
+                    stopX -= resolveStrokeModifier(1) + dip2;
+                    startX = (1 - transformRatio) * (startX + dip8) + transformRatio * stopX;
+                } else {
+                    transformRatio = transformRatio(ratio, .7f, 1);
+                    startX += dip8;
+                    stopX = (1 - transformRatio) * (stopX - resolveStrokeModifier(1)) + transformRatio * startX;
+                }
                 break;
         }
 
