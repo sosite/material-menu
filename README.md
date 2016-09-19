@@ -11,7 +11,7 @@ Have full control of the animation:
 ##Including in your project
 
 ```groovy
-compile 'com.socros.android.lib:material-menu:2.1.0'
+compile 'com.socros.android.lib:material-menu:2.1.1'
 ```
 
 [![Bintray](https://img.shields.io/bintray/v/sosite/maven/material-menu.svg)](https://bintray.com/sosite/maven/material-menu/_latestVersion) [Releases](https://github.com/sosite/material-menu/releases)
