@@ -859,6 +859,11 @@ public class MaterialMenuDrawable extends Drawable implements MaterialMenu, Anim
                 case CHECK:
                     animationState = AnimationState.BURGER_CHECK;
                     transformationValue = TRANSFORMATION_MID;
+                    break;
+                case HIDE:
+                    animationState = AnimationState.BURGER_HIDE;
+                    transformationValue = TRANSFORMATION_MID;
+                    break;
             }
             currentIconState = iconState;
             invalidateSelf();
